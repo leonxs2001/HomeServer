@@ -1,0 +1,349 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.category-option {
+    color: white;
+}
+
+#container {
+    width: 40vw;
+    margin-left: 30vw;
+
+    height: 65vh;
+    margin-top: 8vh;
+}
+
+#description-opt {
+    display: none;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1em;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+h2 {
+    margin: 0;
+}
+
+#logout-link {
+    height: fit-content;
+    width: fit-content;
+}
+
+#logout-image, #back-image {
+    height: 0.8em;
+}
+
+#back-link, #logout-link {
+    all: revert;
+    text-decoration: none;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    margin-left: 0.2em;
+}
+
+#macro-info-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+#kcal-div {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#carbohydrates-div {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+#sugar-div {
+    padding: 0.5em 0.5em 0.5em 1em;
+}
+
+.single-macro-div, #carbohydrates-div, #single-carbohydrates-div {
+    padding: 0.5em;
+}
+
+.single-macro-div, #carbohydrates-div {
+    border: 1px solid black;
+}
+
+#add-food-btn {
+    display: flex;
+    margin-top: 1.5em;
+    padding: 0.2em 0.4em;
+}
+
+#dish-list-head {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+}
+
+#dish-list-add-image {
+    height: 1.7em;
+    border: 0.15em solid black;
+}
+
+#dish-list-container {
+    height: 70%;
+    margin-top: 1.5em;
+}
+
+#dish-list {
+    height: 80%;
+    overflow: auto;
+    border: 1px solid black;
+    padding: 0 0.2em;
+}
+
+.dish-item {
+    width: calc(100% - 0.8em - 2px);
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+    padding: 0.4em;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 1.2em;
+    border: 1px solid black;
+}
+
+.delete-img, .edit-img, .clone-img {
+    width: 5%;
+}
+
+.delete-img, .edit-img {
+    margin-left: 1%;
+}
+
+.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover {
+    transform: scale(1.05);
+}
+
+.name-div, .amount-div {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.name-div {
+    width: 40%;
+}
+
+.amount-div {
+    width: 43%;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999; /* Damit das Overlay über allem anderen liegt */
+}
+
+#formContainer {
+
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 40vw;
+    z-index: 1000; /* Damit das Formular über dem Overlay liegt */
+}
+
+#close-form-div {
+    height: fit-content;
+}
+
+#close-form-img {
+    margin: 0.5em;
+    float: right;
+    height: 1.5em;
+    border-radius: 50%;
+    border: 0.2em solid black;
+}
+
+#name-input {
+    width: -webkit-fill-available;
+    margin-bottom: 0.5em;
+}
+
+#amount-input {
+        width: -webkit-fill-available;
+    margin-bottom: 1em;
+}
+
+#form-div {
+    margin: 0 2em;
+}
+
+#food-add-image {
+    height: 1.5em;
+    border: 0.15em solid black;
+    margin-top: auto;
+}
+
+input, select, button {
+    padding: 0.4em;
+}
+
+#ingredients-h3 {
+    margin-bottom: 0.4em;
+    margin-top: 0.2em;
+}
+
+
+#food-add-div {
+    display: flex;
+    flex-direction: row;
+    padding: 0.2em 0;
+}
+
+.food-name-div {
+    width: 30%;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.unit-div {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.food-amount-div {
+    width: 50%;
+    display: inherit;
+}
+
+.food-amount-input {
+    width: 80%;
+    font-size: 1.01em;
+    padding: 0 0.4em;
+    margin: 0.2em 0;
+}
+
+#food-item-container {
+    height: 25vh;
+    border: 0.1em solid black;
+    margin-top: 0.5em;
+    overflow: auto;
+}
+
+.single-food-item-container {
+    margin: 0.4em 0.2em 0.4em 0.2em;
+    height: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+    padding: 0.1em;
+    border: 1px solid grey;
+}
+
+#confirm-btn {
+    float: right;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    padding: 0.3em 1em;
+}
+
+#close-btn {
+    margin-left: 0.5em;
+    float: right;
+    margin-top: 1em;
+    padding: 0.3em 1em;
+}
+
+.food-delete-img {
+    height: 1.8em;
+}
+
+#food-template, #dish-template {
+    display: none;
+}
+
+#food-edit-image {
+    height: 1.4em;
+    margin-left: 0.4em;
+
+}
+
+#food-edit-link {
+    text-decoration: none;
+}
+
+#macro-h2 {
+    margin-bottom: 0.4em;
+}
+
+#category-select, #search-input, #food-select {
+    width: 100%;
+}
+
+#food-select-div{
+    margin-left: auto;
+}
+
+.input-div {
+    width: 30%;
+}
+
+
+@media screen and (max-device-width: 480px) {
+    body {
+        font-size: 1.5em;
+    }
+
+    #container {
+        width: 80vw;
+        margin-left: 10vw;
+        margin-top: 15vh;
+    }
+
+    #formContainer {
+        width: 80vw;
+        top: 42%;
+    }
+
+    input, select, button {
+        font-size: 1.5em;
+        padding: 0;
+    }
+
+    #food-item-container {
+        height: 20vh;
+    }
+
+    #food-edit-image {
+        height: 1.2em;
+        margin-left: 0.2em
+    }
+
+}

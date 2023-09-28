@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>WeightWatch</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/weight-watch-style.css' %}">
+</head>
+<body>
+{% csrf_token %}
+<div id="container">
+    <h1>
+        <div>WeightWatch von {{ user.username }}</div>
+        <a id="back-link" href="/">
+            <img id="back-image" src="{% static 'images/back.svg' %}">
+        </a>
+        <a id="logout-link" href="/logout">
+            <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
+        </a>
+    </h1>
+    <h2 id="macro-h2">Deine Macros heute:</h2>
+    <div id="macro-info-div">
+        <div class="single-macro-div" id="kcal-div">
+            kcal: {{ kcal }}
+        </div>
+        <div class="single-macro-div" id="fat-div">
+            Fett: {{ fat }}g
+        </div>
+        <div id="carbohydrates-div">
+            <div id="single-carbohydrates-div">
+                Kohlenhydrate: {{ carbohydrates }}g
+            </div>
+            <div id="sugar-div">
+                davon Zucker: {{ sugar }}g
+            </div>
+        </div>
+        <div class="single-macro-div" id="proteins-div">
+            Proteine: {{ proteins }}g
+        </div>
+    </div>
+    <a id="food-edit-link" href="/weight-watch/food">
+        <button id="add-food-btn">
+            <div>Zutaten bearbeiten</div>
+            <img id="food-edit-image" src="{% static 'images/edit.svg' %}">
+        </button>
+    </a>
+    <div id="dish-list-container">
+        <div id="dish-list-head">
+            <h2>Zuletzt gegessen:</h2>
+            <input type="search" id="dish-search-input" placeholder="Suche...">
+            <img id="dish-list-add-image" src="{% static 'images/plus-solid.svg' %}">
+        </div>
+        <div id="dish-list">
+            <div id="dish-template" class="dish-item">
+                <div class="name-div"></div>
+                <div class="amount-div"> g/ml</div>
+                <img class="clone-img" src="{% static 'images/clone.svg' %}">
+                <img class="edit-img" src="{% static 'images/edit.svg' %}">
+                <img data-id="0" class="delete-img" src="{% static 'images/delete.svg' %}">
+            </div>
+            {% for user_dish_amount in user_dish_amounts %}
+                <div class="dish-item" id="dish-item-{{ user_dish_amount.id }}">
+                    <div class="name-div">{{ user_dish_amount.dish.name }}</div>
+                    <div class="amount-div">{{ user_dish_amount.amount }} %</div>
+                    <img class="clone-img" src="{% static 'images/clone.svg' %}">
+                    <img class="edit-img" src="{% static 'images/edit.svg' %}">
+                    <img data-id="{{ user_dish_amount.id }}" class="delete-img" src="{% static 'images/delete.svg' %}">
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<div id="overlay">
+    <div id="formContainer">
+        <data id="food-data" data-update="0" data-id="-1"></data>
+        <div id="close-form-div">
+            <img id="close-form-img" src="{% static 'images/cross-close.svg' %}">
+        </div>
+        <h1>Erstelle eine neue Speise:</h1>
+        <div id="form-div">
+            <input id="name-input" type="text" placeholder="Name...">
+            <input id="amount-input" min="0" max="100" step="0.01" type="number" placeholder="Menge in Prozent...">
+            <h3 id="ingredients-h3">Zutaten hinzufügen:</h3>
+            <div id="food-add-div">
+                <div class="input-div">
+                    <label>Kategorie:</label>
+                    <select id="category-select">
+                        <option>----</option>
+                        {% for category in categories %}
+                            <option class="category-option" style="background: {{ category.color }}"
+                                    value="{{ category.id }}">{{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-div">
+                    <label>Suche:</label>
+                    <input id="search-input" type="search" placeholder="Suche...">
+                </div>
+                <div id="food-select-div" class="input-div">
+                    <label>Neue Zutat:</label>
+                    <select id="food-select">
+                    <option value="">----</option>
+                        {% for single_food in food %}
+                            <option value="{{ single_food.id }}"
+                                    data-categories="
+                        {% for category in single_food.category_set.all %}
+                            {{ category.id }},
+                        {% endfor %}
+                        "
+                            >{{ single_food.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <img id="food-add-image" src="{% static 'images/plus-solid.svg' %}">
+            </div>
+            <div id="food-item-container">
+                <div id="food-template" class="single-food-item-container">
+                    <input hidden class="food-id-input">
+                    <div class="food-name-div">Name</div>
+                    <div class="food-amount-div">
+                        <input min="0" class="food-amount-input" type="number" step="0.1" placeholder="Menge...">
+                        <div class="unit-div">g/ml</div>
+                    </div>
+                    <img class="food-delete-img" src="{% static 'images/delete.svg' %}">
+                </div>
+
+            </div>
+            <button id="close-btn">Close</button>
+            <button id="confirm-btn">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/weight_watch_script.js' %}"></script>
+</body>
+</html>

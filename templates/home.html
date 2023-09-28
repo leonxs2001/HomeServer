@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <div id="container">
+        <h1>Home Sweet Home Server <a id="logout-link" href="/logout"><img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}"></a></h1>
+        <div id="link_container">
+            <a class="main-nav-link" href="/weight-watch">WeightWatch</a>
+            <a class="main-nav-link" href="/geld">GeldWatch</a>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

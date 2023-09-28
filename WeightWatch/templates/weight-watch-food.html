@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>WeightWatch</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/weight-watch-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/weight-watch-food-style.css' %}">
+</head>
+<body>
+{% csrf_token %}
+<div id="container">
+    <h1>
+        <div>Deine Zutaten</div>
+        <a id="back-link" href="/weight-watch">
+            <img id="back-image" src="{% static 'images/back.svg' %}">
+        </a>
+        <a id="logout-link" href="/logout">
+            <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
+        </a>
+    </h1>
+
+    <div id="add-div">
+        <button id="add-new-food-btn">Zutat hinzufügen</button>
+        <button id="add-category-btn">Kategorie hinzufügen</button>
+    </div>
+
+    <div id="food-div">
+        <div id="food-template" class="single-food-item">
+            <input hidden class="food-id-input">
+            <div class="food-name">Name</div>
+            <div class="categories-div">
+            </div>
+            <img class="edit-food-img" src="{% static 'images/edit.svg' %}">
+            <img class="delete-food-img" src="{% static 'images/delete.svg' %}">
+        </div>
+
+        {% for single_food in food %}
+            <div class="single-food-item" id="food-item-{{ single_food.id }}">
+                <input hidden class="food-id-input" value="{{ single_food.id }}">
+                <div class="food-name">{{ single_food.name }}</div>
+                <div class="categories-div">
+                    {% for category in single_food.category_set.all %}
+                        <div data-id="{{ category.id }}" data-name="{{ category.name }}" class="color-div"
+                             style="background: {{ category.color }}; color: {{ category.color }};">
+                            W
+                        </div>
+                    {% endfor %}
+                </div>
+                <img class="edit-food-img" src="{% static 'images/edit.svg' %}">
+                <img class="delete-food-img
+                             {% if single_food.number_of_dishes > 0 %}
+                             not-clickable
+                             {% endif %}
+                            " src="{% static 'images/delete.svg' %}">
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="overlay">
+    <div id="formContainer">
+        <data id="food-data" data-update="0" data-id="-1"></data>
+        <div id="close-form-div">
+            <img id="close-form-img" src="{% static 'images/cross-close.svg' %}">
+        </div>
+        <h1>Erstelle eine neue Zutat:</h1>
+        <div id="form-div">
+            <input id="name-input" type="text" placeholder="Name...">
+            <div id="food-macro-div">
+                <div>
+                    <label>kcal:</label>
+                    <input class="single-macro-input" id="kcal-input" type="number" placeholder="kcal..." min="0"
+                           step="0.01">
+                </div>
+                <div>
+                    <label>
+                        Fett:
+                    </label>
+                    <input class="single-macro-input" id="fat-input" type="number" placeholder="Fett..." min="0"
+                           step="0.01">
+                </div>
+                <div>
+                    <label>
+                        Kohlenhydrate:
+                    </label>
+                    <input class="single-macro-input" id="carbohydrates-input" type="number"
+                           placeholder="Kohlenhydrate..." min="0" step="0.01">
+                </div>
+                <div>
+                    <label>
+                        Proteine:
+                    </label>
+                    <input class="single-macro-input" id="proteins-input" type="number" placeholder="Proteine..."
+                           min="0" step="0.01">
+                </div>
+                <div>
+                    <label>
+                        Zucker:
+                    </label>
+                    <input class="single-macro-input" id="sugar-input" type="number" placeholder="Zucker..." min="0"
+                           step="0.01">
+                </div>
+            </div>
+            <h3 id="ingredients-h3">Kategorien:</h3>
+            <div id="category-add-div">
+                <select id="category-select">
+                    {% for category in categories %}
+                        <option data-color="{{ category.color }}" style="background: {{ category.color }}"
+                                value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <img id="category-add-image" src="{% static 'images/plus-solid.svg' %}">
+            </div>
+            <div id="category-item-container">
+                <div id="category-template" class="single-category-item-container">
+                    <input value="-1" hidden class="category-id-input">
+                    <div class="category-name-div">Name</div>
+                    <div class="category-color-div">W</div>
+                    <img class="category-delete-img" src="{% static 'images/delete.svg' %}">
+                </div>
+
+            </div>
+            <button id="close-btn">Close</button>
+            <button id="confirm-btn">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div id="category-overlay">
+    <div id="category-formContainer">
+        <data id="category-data" data-update="0" data-id="-1"></data>
+        <div id="category-close-form-div">
+            <img id="category-close-form-img" src="{% static 'images/cross-close.svg' %}">
+        </div>
+        <h1>Erstelle eine neue Kategorie</h1>
+        <div id="category-form-div">
+            <div id="category-input-div">
+                <input id="category-name-input" type="text" placeholder="Name...">
+                <input id="category-color-input" type="color" value="#ffff90">
+            </div>
+
+            <button id="category-close-btn">Close</button>
+            <button id="category-confirm-btn">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/weight_watch_food_script.js' %}"></script>
+</body>
+</html>
