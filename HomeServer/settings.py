@@ -27,6 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INITIAL_USERS = [
+    {
+        "username": "",
+        "password": "",
+        "first_name": "",
+        "last_name": ""
+    },
+]
+
 
 # Application definition
 
@@ -78,9 +87,9 @@ WSGI_APPLICATION = 'HomeServer.wsgi.application'
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'home_server',
-        'USER': 'root',
-        'PASSWORD': 'dragonball20',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
