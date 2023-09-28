@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from HomeServer.secret_settings import INITIAL_USERS, DATABASES
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,16 +28,6 @@ SECRET_KEY = 'django-insecure-7(fi0&wouitld02=dliuhesn0udl7*p$0rtn5amo+uv0etypo^
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-INITIAL_USERS = [
-    {
-        "username": "",
-        "password": "",
-        "first_name": "",
-        "last_name": ""
-    },
-]
-
 
 # Application definition
 
@@ -80,20 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'HomeServer.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
 
 LOGIN_URL = "/login/"
 
