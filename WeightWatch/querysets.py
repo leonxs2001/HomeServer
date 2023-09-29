@@ -35,5 +35,5 @@ class DishAmountQuerySet(QuerySet):
 class FoodQuerySet(QuerySet):
     def all_with_number_of_dishes(self):
         return self.all().order_by("-pk").annotate(
-            number_of_dishes=Count(F("dishfoodamount"))
+            number_of_dishes=Count(F("dishfoodamount"), distinct=False)
         )

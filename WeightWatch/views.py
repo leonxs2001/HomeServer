@@ -22,7 +22,7 @@ class WeightWatchView(TemplateView):
         user = self.request.user
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
         context["user"] = user
-        context["user_dish_amounts"] = UserDishAmount.objects.all().select_related("dish")
+        context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).select_related("dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
         return context
@@ -35,7 +35,6 @@ class WeightWatchFoodView(TemplateView):
         context = dict()
         context["categories"] = Category.objects.all()
         context["food"] = Food.objects.all_with_number_of_dishes()
-        e = [e for e in context["food"]]
         return context
 
 
@@ -69,11 +68,17 @@ class ManageUserDishAmountView(View):
         data = json.loads(request.body.decode("utf-8"))
         user_dish_amount_id = int(data["id"])
 
-        UserDishAmount.objects.filter(id=user_dish_amount_id, user=user).delete()
+        try:
+            user_dish_amount = UserDishAmount.objects.get(id=user_dish_amount_id)
 
-        context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
+            user_dish_amount.dish.delete()
+            user_dish_amount.delete()
 
-        return JsonResponse(context, ModelJSONEncoder)
+            context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
+
+            return JsonResponse(context, ModelJSONEncoder)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=400)
 
     def post(self, request):
         user = self.request.user
@@ -204,8 +209,8 @@ class ManageCategoryView(View):
         category = Category.objects.create(name=data["name"], color=data["color"])
 
         return JsonResponse({
-                "id": category.id
-            }, ModelJSONEncoder)
+            "id": category.id
+        }, ModelJSONEncoder)
 
     def put(self, request):
         data = json.loads(request.body.decode("utf-8"))
