@@ -12,7 +12,7 @@ h1 {
 }
 
 #food-div {
-    margin-top: 2em;
+    margin-top: 1em;
     border: 1px solid black;
     height: 40vh;
     overflow: auto;
@@ -220,6 +220,10 @@ h1 {
     grid-column-start: 1;
 
     grid-column-end: 3;
+}
+
+#food-search-input{
+    margin-top: 1em;
 }
 
 

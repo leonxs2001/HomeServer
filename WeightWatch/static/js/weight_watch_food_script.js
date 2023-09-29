@@ -12,6 +12,7 @@ const proteinsInput = document.querySelector("#proteins-input");
 const sugarInput = document.querySelector("#sugar-input");
 const foodTemplate = document.querySelector("#food-template");
 const foodDiv = document.querySelector("#food-div");
+const foodSearchInput = document.querySelector("#food-search-input");
 
 const categoryOverlay = document.querySelector("#category-overlay");
 const categoryDataElement = document.querySelector("#category-data");
@@ -70,6 +71,8 @@ window.addEventListener("load", () => {
     colorDivs.forEach(colorDiv => {
         colorDiv.addEventListener("click", onEditCategory);
     });
+
+    foodSearchInput.addEventListener("input", onFoodSearchInput);
 });
 
 function onFormClose() {
@@ -141,6 +144,9 @@ function onFormConfirm() {
                 throw new Error("Request failed.");
             }
         }).then(data => {
+            foodSearchInput.value="";
+            functionShowAllFoodItems();
+
             const newFoodItem = foodTemplate.cloneNode(true);
             newFoodItem.id = "food-item-" + data["id"];
             newFoodItem.querySelector(".food-id-input").value = data["id"];
@@ -150,7 +156,7 @@ function onFormConfirm() {
 
             for (let i = 0; i < categories.length; i++) {
                 const newColorDiv = document.createElement("div");
-                newColorDiv.innerText = "WW";
+                newColorDiv.innerText = "W";
                 newColorDiv.classList.add("color-div");
                 newColorDiv.dataset.id = categories[i];
                 newColorDiv.dataset.name = categoryNames[i];
@@ -173,7 +179,6 @@ function onFormConfirm() {
             }else{
                 foodDiv.insertBefore(newFoodItem, foodDiv.firstChild);
             }
-
 
 
         }).catch((error) => console.log(error));
@@ -457,4 +462,24 @@ function rgbToHex(rgb) {
         hex += hexPart;
     }
     return hex;
+}
+
+function onFoodSearchInput(event){
+    let searchText = event.target.value.toLowerCase();
+
+    const foodNames = document.querySelectorAll(".food-name");
+    foodNames.forEach(foodName =>{
+        if(foodName.innerText.toLowerCase().includes(searchText)){
+            foodName.parentElement.style.display = "";
+        }else{
+            foodName.parentElement.style.display = "none";
+        }
+    });
+}
+
+function functionShowAllFoodItems(){
+    const foodItems = document.querySelectorAll(".single-food-item");
+    foodItems.forEach(foodItem =>{
+        foodItem.style.display="";
+    });
 }
