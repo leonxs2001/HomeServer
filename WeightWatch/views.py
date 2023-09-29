@@ -172,7 +172,6 @@ class ManageFoodView(View):
         data = json.loads(request.body.decode("utf-8"))
 
         try:
-            print(data)
             food = Food.objects.get(id=int(data["id"]))
             food.name = data["name"]
             food.kcal = float(data["kcal"])

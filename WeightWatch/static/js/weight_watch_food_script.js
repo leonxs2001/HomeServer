@@ -141,11 +141,6 @@ function onFormConfirm() {
                 throw new Error("Request failed.");
             }
         }).then(data => {
-            if (update) {//todo
-                let oldElement = document.querySelector("#food-item-" + data["id"]);
-                oldElement.remove();
-            }
-
             const newFoodItem = foodTemplate.cloneNode(true);
             newFoodItem.id = "food-item-" + data["id"];
             newFoodItem.querySelector(".food-id-input").value = data["id"];
@@ -165,10 +160,21 @@ function onFormConfirm() {
                 categoriesDiv.appendChild(newColorDiv);
             }
 
-            newFoodItem.querySelector(".delete-food-img").addEventListener("click", onDeleteFoodImageClick);
+            const newDeleteFoodImage = newFoodItem.querySelector(".delete-food-img");
+            newDeleteFoodImage.addEventListener("click", onDeleteFoodImageClick);
             newFoodItem.querySelector(".edit-food-img").addEventListener("click", onEditFoodItemClick);
-            console.log(newFoodItem, foodDiv);
-            foodDiv.insertBefore(newFoodItem, foodDiv.firstChild);
+
+            if (update) {
+                let oldElement = document.querySelector("#food-item-" + data["id"]);
+                let oldDeleteFoodImage = oldElement.querySelector(".delete-food-img");
+                newDeleteFoodImage.classList = oldDeleteFoodImage.classList;//for the not clickable class
+                foodDiv.insertBefore(newFoodItem, oldElement);
+                oldElement.remove();
+            }else{
+                foodDiv.insertBefore(newFoodItem, foodDiv.firstChild);
+            }
+
+
 
         }).catch((error) => console.log(error));
 
