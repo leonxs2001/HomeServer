@@ -11,13 +11,15 @@
 {% csrf_token %}
 <div id="container">
     <h1>
-        <div>Deine Zutaten</div>
+        <div id="head-links-div">
         <a id="back-link" href="/weight-watch">
             <img id="back-image" src="{% static 'images/back.svg' %}">
         </a>
         <a id="logout-link" href="/logout">
             <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
         </a>
+        </div>
+        <div>Die bisher erstellten Zutaten</div>
     </h1>
 
     <div id="add-div">
@@ -64,11 +66,11 @@
         <div id="close-form-div">
             <img id="close-form-img" src="{% static 'images/cross-close.svg' %}">
         </div>
-        <h1>Erstelle eine neue Zutat:</h1>
+        <h1>Deine Zutat:</h1>
         <div id="form-div">
             <input id="name-input" type="text" placeholder="Name...">
             <div id="food-macro-div">
-                <div>
+                <div id="kcal-input-div">
                     <label>kcal:</label>
                     <input class="single-macro-input" id="kcal-input" type="number" placeholder="kcal..." min="0"
                            step="0.01">
@@ -116,7 +118,7 @@
                 <div id="category-template" class="single-category-item-container">
                     <input value="-1" hidden class="category-id-input">
                     <div class="category-name-div">Name</div>
-                    <div class="category-color-div">W</div>
+                    <div class="category-color-div">WW</div>
                     <img class="category-delete-img" src="{% static 'images/delete.svg' %}">
                 </div>
 
@@ -133,7 +135,7 @@
         <div id="category-close-form-div">
             <img id="category-close-form-img" src="{% static 'images/cross-close.svg' %}">
         </div>
-        <h1>Erstelle eine neue Kategorie</h1>
+        <h1>Die Kategorie</h1>
         <div id="category-form-div">
             <div id="category-input-div">
                 <input id="category-name-input" type="text" placeholder="Name...">

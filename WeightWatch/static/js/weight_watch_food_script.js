@@ -150,7 +150,7 @@ function onFormConfirm() {
 
             for (let i = 0; i < categories.length; i++) {
                 const newColorDiv = document.createElement("div");
-                newColorDiv.innerText = "W";
+                newColorDiv.innerText = "WW";
                 newColorDiv.classList.add("color-div");
                 newColorDiv.dataset.id = categories[i];
                 newColorDiv.dataset.name = categoryNames[i];

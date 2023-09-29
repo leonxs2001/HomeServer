@@ -5,9 +5,13 @@ body {
 }
 
 h1 {
-    width: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
     font-size: 2em;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 #container {
@@ -53,20 +57,31 @@ h1 {
 }
 
 #logout-image {
-    height: 0.5em;
+    height: 1em;
 }
+
+#head-links-div{
+    display: flex;
+    justify-content: flex-end;
+}
+
 
 @media screen and (max-device-width: 480px) {
     body {
         font-size: 1.5em;
     }
 
-    a {
-        width: 60%;
-        padding: 3%;
+    h1 {
+        font-size: 3em;
     }
 
-    h1 {
-        font-size: 2.5em;
+    .main-nav-link{
+        width: 50%;
+        padding: 5% 5%;
+        font-size: 1.5em;
+    }
+
+    #link_container{
+        height: 70%;
     }
 }

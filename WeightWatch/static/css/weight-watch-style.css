@@ -21,13 +21,18 @@ body {
 }
 
 h1 {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1em;
+    width: fit-content;
     display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    font-size: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0em;
+}
+
+#head-links-div {
+    display: flex;
+    justify-content: flex-end;
 }
 
 h2 {
@@ -40,7 +45,11 @@ h2 {
 }
 
 #logout-image, #back-image {
-    height: 0.8em;
+    height: 1em;
+}
+
+#back-image {
+    margin-right: 0.3em;
 }
 
 #back-link, #logout-link {
@@ -124,7 +133,8 @@ h2 {
     align-content: center;
     flex-wrap: wrap;
     justify-content: space-between;
-    font-size: 1.2em;
+    font-size: 1.4em;
+    font-size: 1.4em;
     border: 1px solid black;
 }
 
@@ -166,9 +176,8 @@ h2 {
 }
 
 #formContainer {
-
     position: absolute;
-    top: 43%;
+    top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
@@ -178,6 +187,9 @@ h2 {
 
 #close-form-div {
     height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 #close-form-img {
@@ -194,7 +206,7 @@ h2 {
 }
 
 #amount-input {
-        width: -webkit-fill-available;
+    width: -webkit-fill-available;
     margin-bottom: 1em;
 }
 
@@ -250,7 +262,7 @@ input, select, button {
 }
 
 #food-item-container {
-    height: 25vh;
+    height: 45vh;
     border: 0.1em solid black;
     margin-top: 0.5em;
     overflow: auto;
@@ -307,7 +319,7 @@ input, select, button {
     width: 100%;
 }
 
-#food-select-div{
+#food-select-div {
     margin-left: auto;
 }
 
@@ -321,15 +333,19 @@ input, select, button {
         font-size: 1.5em;
     }
 
+    h1 {
+        font-size: 2.6em;
+    }
+
     #container {
         width: 80vw;
         margin-left: 10vw;
-        margin-top: 15vh;
+        margin-top: 10vh;
     }
 
     #formContainer {
         width: 80vw;
-        top: 42%;
+        top: 46%;
     }
 
     input, select, button {
@@ -338,12 +354,86 @@ input, select, button {
     }
 
     #food-item-container {
-        height: 20vh;
+        height: 35vh;
     }
 
     #food-edit-image {
         height: 1.2em;
         margin-left: 0.2em
+    }
+
+    #back-image {
+        margin-right: 0.1em;
+    }
+
+    h2{
+        font-size: 2em;
+    }
+
+    .single-macro-div, #single-carbohydrates-div, #sugar-div{
+        font-size: 1.2em;
+    }
+
+    #dish-search-input{
+            padding: 0.2em 0;
+    }
+
+    #dish-list-add-image{
+        height: 2em;
+    }
+
+    #ingredients-h3{
+        font-size: 1.6em;
+    }
+
+    label{
+        font-size: 1.5em;
+    }
+
+    .single-food-item-container{
+        font-size: 1.4em;
+    }
+
+    #food-add-div{
+        flex-wrap: wrap;
+    }
+
+    .input-div{
+        width: 50%;
+    }
+
+    #food-select-div{
+        margin-left: 0;
+    }
+
+    #food-select-div{
+        width: calc(92% - 0.3em);
+    }
+
+    #food-select{
+        width: -moz-fit-content;
+    }
+
+    #food-add-image{
+        width: 8%;
+        height: auto;
+    }
+
+    #category-select, #search-input, #food-select{
+        padding: 0.2em;
+    }
+
+    #close-form-img{
+        height: 2em;
+        margin: 0.8em;
+    }
+
+    .clone-img, .edit-img, .delete-img{
+        width: 7%;
+    }
+
+    .amount-div{
+        width: 37%;
     }
 
 }
