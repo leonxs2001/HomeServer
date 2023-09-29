@@ -18,26 +18,83 @@
                 <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
             </a>
         </div>
-        <div>{{ user.first_name}}s WeightWatch</div>
+        <div>{{ user.first_name }}s WeightWatch</div>
     </h1>
     <h2 id="macro-h2">Deine Macros heute:</h2>
     <div id="macro-info-div">
         <div class="single-macro-div" id="kcal-div">
-            kcal: {{ kcal }}
+            <div class="macro-text-div">
+                kcal:
+                <span>
+                    {{ kcal }}
+                </span>
+            g
+            </div>
+            <div class="divide-div">/</div>
+            <div class="macro-input-div">
+                <input data-type="kcal" id="own-kcal-input" class="own-macro-input" type="number" value="{{ user_profile.kcal }}">
+                <div class="g-div">g</div>
+            </div>
         </div>
         <div class="single-macro-div" id="fat-div">
-            Fett: {{ fat }}g
+            <div class="macro-text-div">
+                Fett:
+                <span>
+                    {{ fat }}
+                </span>
+                g
+            </div>
+            <div class="divide-div">/</div>
+            <div class="macro-input-div">
+                <input data-type="fat" id="own-fat-input" class="own-macro-input" step="0.01" type="number"
+                       value="{{ user_profile.fat }}">
+                <div class="g-div">g</div>
+            </div>
         </div>
         <div id="carbohydrates-div">
             <div id="single-carbohydrates-div">
-                Kohlenhydrate: {{ carbohydrates }}g
+                <div class="macro-text-div"> Kohlenhydrate:
+                    <span>
+                       {{ carbohydrates }}
+                    </span>
+                    g
+                </div>
+                <div class="divide-div">/</div>
+                <div class="macro-input-div">
+                    <input data-type="carbohydrates" id="own-carbohydrates-input" class="own-macro-input" step="0.01" type="number"
+                           value="{{ user_profile.carbohydrates }}">
+                    <div class="g-div">g</div>
+                </div>
             </div>
             <div id="sugar-div">
-                davon Zucker: {{ sugar }}g
+                <div class="macro-text-div">
+                    davon Zucker:
+                    <span>
+                        {{ sugar }}
+                    </span>
+                    g
+                </div>
+                <div class="divide-div">/</div>
+                <div class="macro-input-div">
+                    <input data-type="sugar" id="own-sugar-input" class="own-macro-input" step="0.01" type="number"
+                           value="{{ user_profile.sugar }}">
+                    <div class="g-div">g</div>
+                </div>
             </div>
         </div>
         <div class="single-macro-div" id="proteins-div">
-            Proteine: {{ proteins }}g
+            <div class="macro-text-div">Proteine:
+                <span>
+                    {{ proteins }}
+                </span>
+                g
+            </div>
+            <div class="divide-div">/</div>
+            <div class="macro-input-div">
+                <input data-type="proteins" id="own-proteine-input" class="own-macro-input" step="0.01" type="number"
+                       value="{{ user_profile.proteins }}">
+                <div class="g-div">g</div>
+            </div>
         </div>
     </div>
     <a id="food-edit-link" href="/weight-watch/food">

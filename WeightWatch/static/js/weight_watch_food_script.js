@@ -73,6 +73,7 @@ window.addEventListener("load", () => {
     });
 
     foodSearchInput.addEventListener("input", onFoodSearchInput);
+4
 });
 
 function onFormClose() {

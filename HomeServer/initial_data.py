@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from WeightWatch.models import WeightWatchUserProfile
+
+
 def initialize():
     """Method for initializing all the data of the application."""
     __init_base_users()
@@ -15,6 +18,7 @@ def __init_base_users():
             first_name=user_dict["first_name"],
             last_name=user_dict["last_name"]
         )
+        WeightWatchUserProfile.objects.get_or_create(user=user)
         if created:
             user.set_password(user_dict["password"])
             user.save()

@@ -62,15 +62,25 @@ window.addEventListener("load", () => {
 
     const dishSearchInput = document.querySelector("#dish-search-input");
     dishSearchInput.addEventListener("input", onDishSearchInput);
+
+    const ownMacroInputs = document.querySelectorAll(".own-macro-input");
+    ownMacroInputs.forEach(ownMacroInput =>{
+        ownMacroInput.addEventListener("change", onMacroInputChange);
+    });
+
+    setMacroTextColors();
+
 });
 
 
 function fillMacrosFromData(data) {
-    kcalDiv.innerText = "kcal: " + data["kcal"];
-    fatDiv.innerText = "Fett: " + data["fat"] + "g";
-    proteinsDiv.innerText = "Proteine: " + data["proteins"] + "g";
-    carbohydratesDiv.innerText = "Kohlenhydrate: " + data["carbohydrates"] + "g";
-    sugarDiv.innerText = "davon Zucker: " + data["sugar"] + "g";
+    kcalDiv.querySelector("span").innerText = data["kcal"];
+    fatDiv.querySelector("span").innerText =data["fat"];
+    proteinsDiv.querySelector("span").innerText = data["proteins"];
+    carbohydratesDiv.querySelector("span").innerText = data["carbohydrates"];
+    sugarDiv.querySelector("span").innerText = data["sugar"];
+
+    setMacroTextColors();
 }
 
 function onDeleteItemClick(event) {
@@ -369,4 +379,48 @@ function showAllNameDivs(){
     });
 
     dishSearchInput.value = "";
+}
+
+function onMacroInputChange(event){
+    let newValue = event.target.value;
+    let type = event.target.dataset.type;
+
+    fetch("/weight-watch/user-profile", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfMiddlewareToken.value
+                },
+                body: JSON.stringify({
+                    type: type,
+                    value: newValue
+                })
+            }).then((response) => {
+                if (response.ok) {
+                    setMacroTextColors();
+                }else {
+                    throw new Error("Request failed.");
+                }
+            }).catch((error) => console.log(error));
+}
+
+function setMacroTextColors(){
+    const macroDivs = document.querySelectorAll(".single-macro-div, #single-carbohydrates-div, #sugar-div");
+    macroDivs.forEach(macroDiv =>{
+        const valueSpan = macroDiv.querySelector("span");
+        let value = parseFloat(valueSpan.innerText);
+        let ownValue = parseFloat(macroDiv.querySelector(".own-macro-input").value);
+
+        console.log(macroDiv, value, ownValue)
+
+        if(!ownValue){
+            ownValue = 0;
+        }
+
+        if(value > ownValue){
+            valueSpan.style.color = "#FF5733";
+        }else{
+            valueSpan.style.color = "#008000";
+        }
+    });
 }

@@ -46,3 +46,12 @@ class UserDishAmount(models.Model):
 
     class Meta:
         ordering = ["-eaten"]
+
+class WeightWatchUserProfile(models.Model):
+    user = models.OneToOneField(User, models.CASCADE, primary_key=True)
+
+    kcal = models.IntegerField(default=0)
+    fat = models.FloatField(default=0)
+    carbohydrates = models.FloatField(default=0)
+    sugar = models.FloatField(default=0)
+    proteins = models.FloatField(default=0)

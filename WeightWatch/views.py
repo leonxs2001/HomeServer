@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 
-from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category
+from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, WeightWatchUserProfile
 from WeightWatch.utils import ModelJSONEncoder
 
 
@@ -22,6 +22,7 @@ class WeightWatchView(TemplateView):
         user = self.request.user
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
         context["user"] = user
+        context["user_profile"] = WeightWatchUserProfile.objects.get(user=user)
         context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).select_related("dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
@@ -221,3 +222,28 @@ class ManageCategoryView(View):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=400)
+
+
+class UpdateWeightWatchUserProfileView(View):
+    def put(self, request):
+        user = self.request.user
+
+        data = json.loads(request.body.decode("utf-8"))
+        data_type = data["type"]
+
+        if data_type == "kcal":
+            value = int(data["value"])
+        else:
+            value = float(data["value"])
+
+        user_profile_queryset = WeightWatchUserProfile.objects.filter(user=user)
+
+        if user_profile_queryset.count() <= 0:
+            return HttpResponse(status=400)
+        else:
+            update_context = {
+                data_type: value
+            }
+            user_profile_queryset.update(**update_context)
+            return HttpResponse(status=200)
+
