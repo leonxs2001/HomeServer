@@ -32,7 +32,7 @@
             </div>
             <div class="divide-div">/</div>
             <div class="macro-input-div">
-                <input data-type="kcal" id="own-kcal-input" class="own-macro-input" type="number" value="{{ user_profile.kcal }}">
+                <input id="own-kcal-input" class="own-macro-input" type="number" value="{{ user_macros.kcal }}">
             </div>
         </div>
         <div class="single-macro-div" id="fat-div">
@@ -45,8 +45,8 @@
             </div>
             <div class="divide-div">/</div>
             <div class="macro-input-div">
-                <input data-type="fat" id="own-fat-input" class="own-macro-input" step="0.01" type="number"
-                       value="{{ user_profile.fat }}">
+                <input id="own-fat-input" class="own-macro-input" step="0.01" type="number"
+                       value="{{ user_macros.fat }}">
                 <div class="g-div">g</div>
             </div>
         </div>
@@ -60,8 +60,8 @@
                 </div>
                 <div class="divide-div">/</div>
                 <div class="macro-input-div">
-                    <input data-type="carbohydrates" id="own-carbohydrates-input" class="own-macro-input" step="0.01" type="number"
-                           value="{{ user_profile.carbohydrates }}">
+                    <input id="own-carbohydrates-input" class="own-macro-input" step="0.01" type="number"
+                           value="{{ user_macros.carbohydrates }}">
                     <div class="g-div">g</div>
                 </div>
             </div>
@@ -75,8 +75,8 @@
                 </div>
                 <div class="divide-div">/</div>
                 <div class="macro-input-div">
-                    <input data-type="sugar" id="own-sugar-input" class="own-macro-input" step="0.01" type="number"
-                           value="{{ user_profile.sugar }}">
+                    <input id="own-sugar-input" class="own-macro-input" step="0.01" type="number"
+                           value="{{ user_macros.sugar }}">
                     <div class="g-div">g</div>
                 </div>
             </div>
@@ -90,8 +90,8 @@
             </div>
             <div class="divide-div">/</div>
             <div class="macro-input-div">
-                <input data-type="proteins" id="own-proteine-input" class="own-macro-input" step="0.01" type="number"
-                       value="{{ user_profile.proteins }}">
+                <input id="own-proteins-input" class="own-macro-input" step="0.01" type="number"
+                       value="{{ user_macros.proteins }}">
                 <div class="g-div">g</div>
             </div>
         </div>

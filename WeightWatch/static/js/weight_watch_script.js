@@ -16,6 +16,11 @@ const foodDataElement = document.querySelector("#food-data");
 const categorySelect = document.querySelector("#category-select");
 const searchInput = document.querySelector("#search-input");
 const dishSearchInput = document.querySelector("#dish-search-input");
+const ownProteinsInput = document.querySelector("#own-proteins-input");
+const ownSugarInput = document.querySelector("#own-sugar-input");
+const ownCarbohydratesInput = document.querySelector("#own-carbohydrates-input");
+const ownFatInput = document.querySelector("#own-fat-input");
+const ownKcalInput = document.querySelector("#own-kcal-input");
 
 window.addEventListener("load", () => {
     const deleteImages = document.querySelectorAll(".delete-img");
@@ -382,18 +387,19 @@ function showAllNameDivs(){
 }
 
 function onMacroInputChange(event){
-    let newValue = event.target.value;
-    let type = event.target.dataset.type;
 
-    fetch("/weight-watch/user-profile", {
-                method: "PUT",
+    fetch("/weight-watch/user-macros", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRFToken": csrfMiddlewareToken.value
                 },
                 body: JSON.stringify({
-                    type: type,
-                    value: newValue
+                    kcal: ownKcalInput.value,
+                    fat: ownFatInput.value,
+                    sugar: ownSugarInput.value,
+                    proteins: ownProteinsInput.value,
+                    carbohydrates: ownCarbohydratesInput.value,
                 })
             }).then((response) => {
                 if (response.ok) {

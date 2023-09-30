@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from WeightWatch.models import WeightWatchUserProfile
+from WeightWatch.models import UserMacros
 
 
 def initialize():
@@ -18,7 +18,9 @@ def __init_base_users():
             first_name=user_dict["first_name"],
             last_name=user_dict["last_name"]
         )
-        WeightWatchUserProfile.objects.get_or_create(user=user)
+        user_macros = UserMacros.objects.filter(user=user)
+        if user_macros.count() <= 0:
+            UserMacros.objects.create(user=user)
         if created:
             user.set_password(user_dict["password"])
             user.save()

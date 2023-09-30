@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 
-from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, WeightWatchUserProfile
+from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, UserMacros
 from WeightWatch.utils import ModelJSONEncoder
 
 
@@ -22,7 +22,7 @@ class WeightWatchView(TemplateView):
         user = self.request.user
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
         context["user"] = user
-        context["user_profile"] = WeightWatchUserProfile.objects.get(user=user)
+        context["user_macros"] = UserMacros.objects.filter(user=user).last()
         context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).select_related("dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
@@ -224,26 +224,39 @@ class ManageCategoryView(View):
             return HttpResponse(status=400)
 
 
-class UpdateWeightWatchUserProfileView(View):
-    def put(self, request):
+class UserMacrosView(View):
+    def post(self, request):
         user = self.request.user
 
         data = json.loads(request.body.decode("utf-8"))
-        data_type = data["type"]
+        kcal = data["kcal"]
+        sugar = data["sugar"]
+        fat = data["fat"]
+        proteins = data["proteins"]
+        carbohydrates = data["carbohydrates"]
 
-        if data_type == "kcal":
-            value = int(data["value"])
-        else:
-            value = float(data["value"])
+        try:
+            kcal = int(kcal)
+        except ValueError:
+            kcal = 0
+        try:
+            sugar = float(sugar)
+        except ValueError:
+            sugar = 0
+        try:
+            fat = float(fat)
+        except ValueError:
+            fat = 0
+        try:
+            proteins = float(proteins)
+        except ValueError:
+            proteins = 0
+        try:
+            carbohydrates = float(carbohydrates)
+        except ValueError:
+            carbohydrates = 0
 
-        user_profile_queryset = WeightWatchUserProfile.objects.filter(user=user)
+        UserMacros.objects.create(user=user, kcal=kcal, fat=fat, proteins=proteins,
+                                  sugar=sugar, carbohydrates=carbohydrates)
 
-        if user_profile_queryset.count() <= 0:
-            return HttpResponse(status=400)
-        else:
-            update_context = {
-                data_type: value
-            }
-            user_profile_queryset.update(**update_context)
-            return HttpResponse(status=200)
-
+        return HttpResponse(status=200)

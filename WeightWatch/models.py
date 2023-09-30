@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from WeightWatch.querysets import DishAmountQuerySet, FoodQuerySet
@@ -47,11 +48,12 @@ class UserDishAmount(models.Model):
     class Meta:
         ordering = ["-eaten"]
 
-class WeightWatchUserProfile(models.Model):
-    user = models.OneToOneField(User, models.CASCADE, primary_key=True)
+class UserMacros(models.Model):
+    user = models.ForeignKey(User, models.CASCADE)
 
     kcal = models.IntegerField(default=0)
     fat = models.FloatField(default=0)
     carbohydrates = models.FloatField(default=0)
     sugar = models.FloatField(default=0)
     proteins = models.FloatField(default=0)
+    date = models.DateField(default=timezone.now)
