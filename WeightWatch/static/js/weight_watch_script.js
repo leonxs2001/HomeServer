@@ -69,7 +69,7 @@ window.addEventListener("load", () => {
     dishSearchInput.addEventListener("input", onDishSearchInput);
 
     const ownMacroInputs = document.querySelectorAll(".own-macro-input");
-    ownMacroInputs.forEach(ownMacroInput =>{
+    ownMacroInputs.forEach(ownMacroInput => {
         ownMacroInput.addEventListener("change", onMacroInputChange);
     });
 
@@ -80,7 +80,7 @@ window.addEventListener("load", () => {
 
 function fillMacrosFromData(data) {
     kcalDiv.querySelector("span").innerText = data["kcal"];
-    fatDiv.querySelector("span").innerText =data["fat"];
+    fatDiv.querySelector("span").innerText = data["fat"];
     proteinsDiv.querySelector("span").innerText = data["proteins"];
     carbohydratesDiv.querySelector("span").innerText = data["carbohydrates"];
     sugarDiv.querySelector("span").innerText = data["sugar"];
@@ -298,7 +298,7 @@ function selectEmptyOptionForFoodSelectIfAllHidden() {
     let countHidden = 0;
     let notHidden = null;
     for (let i = 0; i < foodSelect.options.length; i++) {
-        if(foodSelect.options[i].value) {
+        if (foodSelect.options[i].value) {
             if (foodSelect.options[i].style.display == "none") {
                 countHidden++;
             } else {
@@ -309,7 +309,7 @@ function selectEmptyOptionForFoodSelectIfAllHidden() {
 
     if (countHidden == foodSelect.options.length - 1) {
         foodSelect.value = "";
-    }else if(notHidden){
+    } else if (notHidden) {
         foodSelect.value = notHidden.value;
     }
 }
@@ -364,69 +364,75 @@ function onFoodSearchChange(event) {
     selectEmptyOptionForFoodSelectIfAllHidden();
 }
 
-function onDishSearchInput(event){
+function onDishSearchInput(event) {
     let searchString = event.target.value.toLowerCase();
 
     const nameDivs = document.querySelectorAll(".name-div");
-    nameDivs.forEach(nameDiv =>{
-        if(nameDiv.innerText.toLowerCase().includes(searchString)){
-            nameDiv.parentElement.style.display="";
-        }else{
-            nameDiv.parentElement.style.display="none";
+    nameDivs.forEach(nameDiv => {
+        if (nameDiv.innerText.toLowerCase().includes(searchString)) {
+            nameDiv.parentElement.style.display = "";
+        } else {
+            nameDiv.parentElement.style.display = "none";
         }
     });
 }
 
-function showAllNameDivs(){
+function showAllNameDivs() {
     const nameDivs = document.querySelectorAll(".name-div");
-    nameDivs.forEach(nameDiv =>{
-        nameDiv.parentElement.style.display="";
+    nameDivs.forEach(nameDiv => {
+        nameDiv.parentElement.style.display = "";
     });
 
     dishSearchInput.value = "";
 }
 
-function onMacroInputChange(event){
+function onMacroInputChange(event) {
 
     fetch("/weight-watch/user-macros", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfMiddlewareToken.value
-                },
-                body: JSON.stringify({
-                    kcal: ownKcalInput.value,
-                    fat: ownFatInput.value,
-                    sugar: ownSugarInput.value,
-                    proteins: ownProteinsInput.value,
-                    carbohydrates: ownCarbohydratesInput.value,
-                })
-            }).then((response) => {
-                if (response.ok) {
-                    setMacroTextColors();
-                }else {
-                    throw new Error("Request failed.");
-                }
-            }).catch((error) => console.log(error));
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfMiddlewareToken.value
+        },
+        body: JSON.stringify({
+            kcal: ownKcalInput.value,
+            fat: ownFatInput.value,
+            sugar: ownSugarInput.value,
+            proteins: ownProteinsInput.value,
+            carbohydrates: ownCarbohydratesInput.value,
+        })
+    }).then((response) => {
+        if (response.ok) {
+            setMacroTextColors();
+        } else {
+            throw new Error("Request failed.");
+        }
+    }).catch((error) => console.log(error));
 }
 
-function setMacroTextColors(){
+function setMacroTextColors() {
     const macroDivs = document.querySelectorAll(".single-macro-div, #single-carbohydrates-div, #sugar-div");
-    macroDivs.forEach(macroDiv =>{
+    macroDivs.forEach(macroDiv => {
         const valueSpan = macroDiv.querySelector("span");
+        const macroInput = macroDiv.querySelector(".own-macro-input");
         let value = parseFloat(valueSpan.innerText);
-        let ownValue = parseFloat(macroDiv.querySelector(".own-macro-input").value);
+        let ownValue = parseFloat(macroInput.value);
 
-        console.log(macroDiv, value, ownValue)
-
-        if(!ownValue){
+        if (!ownValue) {
             ownValue = 0;
         }
-
-        if(value > ownValue){
-            valueSpan.style.color = "#FF5733";
-        }else{
-            valueSpan.style.color = "#008000";
+        if (macroInput.id == "own-fat-input" || macroInput.id == "own-proteins-input") {
+            if (value > ownValue) {
+                valueSpan.style.color = "#008000";
+            } else {
+                valueSpan.style.color = "#FF5733";
+            }
+        } else {
+            if (value > ownValue) {
+                valueSpan.style.color = "#FF5733";
+            } else {
+                valueSpan.style.color = "#008000";
+            }
         }
     });
 }
