@@ -255,8 +255,13 @@ class UserMacrosView(View):
             carbohydrates = float(carbohydrates)
         except ValueError:
             carbohydrates = 0
-
-        UserMacros.objects.create(user=user, kcal=kcal, fat=fat, proteins=proteins,
-                                  sugar=sugar, carbohydrates=carbohydrates)
+        defaults = {
+            "kcal": kcal,
+            "fat": fat,
+            "proteins": proteins,
+            "sugar": sugar,
+            "carbohydrates": carbohydrates
+        }
+        UserMacros.objects.update_or_create(user=user, date=timezone.now(), defaults=defaults)
 
         return HttpResponse(status=200)
