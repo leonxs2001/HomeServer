@@ -130,7 +130,7 @@ class ManageUserDishAmountView(View):
             dish = user_dish_amount.dish
             dish.name = data["name"]
 
-            user_dish_amount.eaten = eaten=timezone.datetime.strptime(data["date"], DATE_FORMAT)
+            user_dish_amount.eaten = timezone.datetime.strptime(data["date"], DATE_FORMAT)
 
             if user != user_dish_amount.user:
                 return HttpResponse(status=403)
