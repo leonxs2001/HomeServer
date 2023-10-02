@@ -50,6 +50,4 @@ class UserMacrosQuerySet(QuerySet):
                     first_element.date = start
                     result = [first_element, ] + result
 
-            result[-1].date = end
-
         return result

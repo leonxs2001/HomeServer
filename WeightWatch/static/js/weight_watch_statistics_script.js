@@ -108,6 +108,8 @@ function onInputChange() {
         let newDishAmountData = []
 
         let userMacroIndex = 0;
+        let lastUserMacroValue = "";
+        console.log(data);
         for (let i = 0; i < dishAmounts.length; i++) {
             let date = dishAmounts[i]["date"];
             newLabels.push(date);
@@ -115,9 +117,10 @@ function onInputChange() {
 
             if (userMacroIndex < userMacros.length && userMacros[userMacroIndex]["date"] == date) {
                 newUserMacroData.push(userMacros[userMacroIndex][typeString])
+                lastUserMacroValue = userMacros[userMacroIndex][typeString];
                 userMacroIndex++;
             } else {
-                newUserMacroData.push("");
+                newUserMacroData.push(lastUserMacroValue);
             }
 
         }
