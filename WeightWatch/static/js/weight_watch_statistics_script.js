@@ -91,9 +91,11 @@ function onInputChange() {
         if (typeString == "fat" || typeString == "proteins") {
             statisticChart.data.datasets[1].borderColor = "rgb(99, 255, 132)"
             statisticChart.data.datasets[1].backgroundColor = "rgba(99, 255, 132, 0.5)"
+            statisticChart.data.datasets[1].label = "Ziel";
         } else {
             statisticChart.data.datasets[1].borderColor = "rgb(255, 99, 132)"
             statisticChart.data.datasets[1].backgroundColor = "rgba(255, 99, 132, 0.5)"
+            statisticChart.data.datasets[1].label = "Grenze";
         }
 
         statisticChart.options.scales.y.title = {
