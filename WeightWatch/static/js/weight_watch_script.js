@@ -248,6 +248,7 @@ function clearForm() {
             singleFoodItemContainer.remove();
         }
     });
+
 }
 
 function fetchUserDishAmountAndShowOverlay(element, update) {

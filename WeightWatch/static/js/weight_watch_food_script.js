@@ -73,7 +73,7 @@ window.addEventListener("load", () => {
     });
 
     foodSearchInput.addEventListener("input", onFoodSearchInput);
-4
+
 });
 
 function onFormClose() {
@@ -209,6 +209,12 @@ function clearForm() {
     categorySelect.hidden = false;
     categoryAddImage.hidden = false;
     foodDataElement.dataset.update = "0"
+
+    for(let i = 0; i< categorySelect.options.length;i++){
+        if([...categorySelect.options[i].classList].includes("hidden")){
+            categorySelect.options[i].classList.remove("hidden");
+        }
+    }
 }
 
 function createNewCategoryItem(categoryId, categoryName, categoryColor) {
@@ -330,8 +336,6 @@ function onEditFoodItemClick(event) {
     }).then(data => {
         foodDataElement.dataset.update = "1";
         foodDataElement.dataset.id = id;
-
-        console.log(data["categories"]);
 
         let food = data["food"];
         nameInput.value = food["name"];

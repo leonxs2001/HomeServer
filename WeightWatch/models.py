@@ -3,7 +3,15 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from WeightWatch.querysets import DishAmountQuerySet, FoodQuerySet
+from WeightWatch.querysets import DishAmountQuerySet, FoodQuerySet, UserMacrosQuerySet
+
+
+class StatisticChoices(models.TextChoices):
+    KCAL = "kcal", _("kcal")
+    FAT = "fat", _("Fett")
+    CARBOHYDRATES = "carbohydrates", _("Kohlenhydrate")
+    SUGAR = "sugar", _("Zucker")
+    PROTEINS = "proteins", _("Proteine")
 
 
 class Food(models.Model):
@@ -18,7 +26,6 @@ class Food(models.Model):
 
 
 class Category(models.Model):
-
     name = models.CharField(max_length=32)
     color = models.CharField(max_length=8, default="#ffff90")
     food = models.ManyToManyField(Food)
@@ -48,7 +55,10 @@ class UserDishAmount(models.Model):
     class Meta:
         ordering = ["-eaten"]
 
+
 class UserMacros(models.Model):
+    objects = UserMacrosQuerySet.as_manager()
+
     user = models.ForeignKey(User, models.CASCADE)
 
     kcal = models.IntegerField(default=0)

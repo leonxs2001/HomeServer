@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 
 from HomeServer.views import LoginView, LogoutView
 from WeightWatch.views import WeightWatchView, ManageUserDishAmountView, WeightWatchFoodView, ManageFoodView, \
-    ManageCategoryView, UserMacrosView
+    ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -30,11 +30,13 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view()),
 
-    path("weight-watch", login_required(WeightWatchView.as_view())),
+    path("weight-watch/", login_required(WeightWatchView.as_view())),
+    path("weight-watch/statistics/", login_required(WeightWatchStatisticsView.as_view())),
     path("weight-watch/food/", login_required(WeightWatchFoodView.as_view())),
 
     path("weight-watch/user-dish-amount", login_required(ManageUserDishAmountView.as_view())),
     path("weight-watch/food/food", login_required(ManageFoodView.as_view())),
     path("weight-watch/category", login_required(ManageCategoryView.as_view())),
     path("weight-watch/user-macros", login_required(UserMacrosView.as_view())),
+    path("weight-watch/statistics/get-data", login_required(WeightWatchGetStatisticData.as_view())),
 ]

@@ -150,7 +150,7 @@ h2 {
     margin-left: 1%;
 }
 
-.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover {
+.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover, #statistics-img:hover {
     transform: scale(1.05);
 }
 
@@ -241,7 +241,7 @@ input, select, button {
     flex-wrap: wrap;
 }
 
-.unit-div, .macro-input-div, .macro-text-div, .divide-div, .name-div, .amount-div, .g-div { /*centering*/
+.unit-div, .macro-input-div, .macro-text-div, .divide-div, .name-div, .amount-div, .g-div, #macro-h2 div { /*centering*/
     display: flex;
     align-content: center;
     flex-wrap: wrap;
@@ -310,6 +310,10 @@ input, select, button {
 }
 
 #macro-h2 {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
     margin-bottom: 0.4em;
 }
 
@@ -359,6 +363,10 @@ input, select, button {
 
 .macro-text-div span {
     margin-left: 0.4em;
+}
+
+#statistics-img{
+    height: 1.2em;
 }
 
 @media screen and (max-device-width: 480px) {

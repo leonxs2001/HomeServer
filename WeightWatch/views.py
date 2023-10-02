@@ -11,7 +11,9 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 
-from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, UserMacros
+INPUT_TIME_FORMAT = "%Y-%m-%d"
+
+from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, UserMacros, StatisticChoices
 from WeightWatch.utils import ModelJSONEncoder
 
 
@@ -36,6 +38,17 @@ class WeightWatchFoodView(TemplateView):
         context = dict()
         context["categories"] = Category.objects.all()
         context["food"] = Food.objects.all_with_number_of_dishes()
+        return context
+
+
+class WeightWatchStatisticsView(TemplateView):
+    template_name = "weight-watch-statistics.html"
+
+    def get_context_data(self, **kwargs):
+        context = dict()
+        context["statistic_types"] = StatisticChoices.choices
+        context["start_date"] = (timezone.now() - timezone.timedelta(days=6)).strftime(INPUT_TIME_FORMAT)
+        context["end_date"] = timezone.now().strftime(INPUT_TIME_FORMAT)
         return context
 
 
@@ -265,3 +278,29 @@ class UserMacrosView(View):
         UserMacros.objects.update_or_create(user=user, date=timezone.now(), defaults=defaults)
 
         return HttpResponse(status=200)
+
+
+class WeightWatchGetStatisticData(View):
+    def get(self, request):
+        user = self.request.user
+        start_date_string = request.GET["start_date"]
+        end_date_string = request.GET["end_date"]
+        type_string = request.GET["type"]
+
+        start_date = timezone.datetime.strptime(start_date_string, INPUT_TIME_FORMAT)
+        end_date = timezone.datetime.strptime(end_date_string, INPUT_TIME_FORMAT)
+
+        dates = [start_date + timezone.timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+
+        dish_amounts = []
+        for time in dates:
+            dish_amounts.append({
+                "date": time,
+                "dish_amount": UserDishAmount.objects.generate_macro_sum_up(user, time)
+            })
+
+        context = dict()
+        context["user_macros"] = UserMacros.objects.get_with_previous_for_period(user, start_date, end_date)
+        context["dish_amounts"] = dish_amounts
+
+        return JsonResponse(context, ModelJSONEncoder)

@@ -3,7 +3,7 @@ from django.db.models import QuerySet, Model
 from django.forms import model_to_dict
 from django.utils import timezone
 
-DATE_FORMAT = "%Y-%m-%dT%H:%M"
+DATE_FORMAT = "%Y-%m-%d"
 
 
 class ModelJSONEncoder(DjangoJSONEncoder):

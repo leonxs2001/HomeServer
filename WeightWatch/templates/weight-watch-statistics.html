@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistiken</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/weight-watch-statistics-style.css' %}">
+</head>
+<body>
+{% csrf_token %}
+<div id="container">
+    <h1>
+        <div id="head-links-div">
+            <a id="back-link" href="/weight-watch">
+                <img id="back-image" src="{% static 'images/back.svg' %}">
+            </a>
+            <a id="logout-link" href="/logout">
+                <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
+            </a>
+        </div>
+        <div>Deine Statistiken</div>
+    </h1>
+    <div id="input-div">
+        <input value="{{ start_date }}" max="{{ end_date }}" id="start-date-input" type="date"
+               placeholder="Startdatum...">
+        <input value="{{ end_date }}" max="{{ end_date }}" id="end-date-input" type="date" placeholder="Enddatum...">
+        <select id="type-select">
+            {% for statistic_type in statistic_types %}
+                <option value="{{ statistic_type.0 }}">{{ statistic_type.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <canvas width="400" height="200" id="statistic-canvas"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="{% static 'js/weight_watch_statistics_script.js' %}"></script>
+</body>
+</html>

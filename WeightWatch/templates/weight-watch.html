@@ -20,7 +20,12 @@
         </div>
         <div>{{ user.first_name }}s WeightWatch</div>
     </h1>
-    <h2 id="macro-h2">Deine Macros heute:</h2>
+    <h2 id="macro-h2">
+        <div>Deine Macros heute:</div>
+        <a href="/weight-watch/statistics">
+            <img id="statistics-img" src="{% static 'images/statistics.svg' %}">
+        </a>
+    </h2>
     <div id="macro-info-div">
         <div class="single-macro-div" id="kcal-div">
             <div class="macro-text-div">
