@@ -84,7 +84,7 @@ function onInputChange() {
         }
         throw new Error("Request failed.");
     }).then(data => {
-
+        console.log(data)
         let userMacros = data["user_macros"]
         let dishAmounts = data["dish_amounts"];
 

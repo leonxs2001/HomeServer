@@ -142,7 +142,7 @@ h2 {
     border: 1px solid black;
 }
 
-.delete-img, .edit-img, .clone-img {
+.delete-img, .edit-img, .clone-img, .share-img {
     width: 5%;
 }
 
@@ -150,7 +150,7 @@ h2 {
     margin-left: 1%;
 }
 
-.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover, #statistics-img:hover {
+.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover, #statistics-img:hover, .share-img:hover, #close-user-select-form-img:hover {
     transform: scale(1.05);
 }
 
@@ -159,10 +159,10 @@ h2 {
 }
 
 .amount-div {
-    width: 43%;
+    width: 38%;
 }
 
-#overlay {
+#overlay, #shareOverlay {
     display: none;
     position: fixed;
     top: 0;
@@ -183,14 +183,24 @@ h2 {
     z-index: 1000; /* Damit das Formular über dem Overlay liegt */
 }
 
-#close-form-div {
+#shareFormContainer {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 30vw;
+    z-index: 1000; /* Damit das Formular über dem Overlay liegt */
+}
+
+#close-form-div, #close-user-select-form-div {
     height: fit-content;
     width: 100%;
     display: flex;
     justify-content: flex-end;
 }
 
-#close-form-img {
+#close-form-img, #close-user-select-form-img {
     margin: 0.5em;
     float: right;
     height: 1.5em;
@@ -198,14 +208,14 @@ h2 {
     border: 0.2em solid black;
 }
 
-#name-input {
+#name-input, #amount-input {
     width: -webkit-fill-available;
     margin-bottom: 0.5em;
 }
 
-#amount-input {
-    width: -webkit-fill-available;
+#datetime-input{
     margin-bottom: 1em;
+    width: -webkit-fill-available;
 }
 
 #form-div {
@@ -284,7 +294,17 @@ input, select, button {
     padding: 0.3em 1em;
 }
 
-#close-btn {
+#confirm-user-select-btn {
+    float: right;
+    padding: 0.3em 1em;
+    margin-left: 0.4em;
+}
+
+#share-form-div {
+    margin: 0 10%;
+}
+
+#close-btn, close-user-select-btn {
     margin-left: 0.5em;
     float: right;
     margin-top: 1em;
@@ -365,8 +385,20 @@ input, select, button {
     margin-left: 0.4em;
 }
 
-#statistics-img{
+#statistics-img {
     height: 1.2em;
+}
+
+#share-btn-div {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin: 1em 0;
+}
+
+#user-select{
+    width: 100%;
 }
 
 @media screen and (max-device-width: 480px) {
@@ -389,13 +421,17 @@ input, select, button {
         top: 46%;
     }
 
+    #shareFormContainer {
+        width: 80vw;
+        top: 35%;
+    }
+
     input, select, button {
         font-size: 1.5em;
-        padding: 0;
     }
 
     #food-item-container {
-        height: 35vh;
+        height: 30vh;
     }
 
     #food-edit-image {
@@ -469,12 +505,12 @@ input, select, button {
         margin: 0.8em;
     }
 
-    .clone-img, .edit-img, .delete-img {
+    .clone-img, .edit-img, .delete-img, .share-img {
         width: 7%;
     }
 
     .amount-div {
-        width: 37%;
+        width: 30%;
     }
 
     #kcal-div .macro-input-div {
@@ -482,14 +518,14 @@ input, select, button {
     }
 
     #fat-div .macro-input-div, #proteins-div .macro-input-div {
-        width: 30%;
+        width: 35%;
     }
 
-    #single-carbohydrates-div .macro-input-div, #sugar-div .macro-input-div {
+    #single-carbohydrates-div .macro-input-div, #sugar-div .macro-input-div, #fat-div .macro-input-div, #proteins-div .macro-input-div {
         width: 90%;
     }
 
-    #sugar-div .macro-text-div, #single-carbohydrates-div .macro-text-div {
+    #sugar-div .macro-text-div, #single-carbohydrates-div .macro-text-div, #fat-div .macro-text-div, #proteins-div .macro-text-div {
         width: 100%;
     }
 
@@ -498,7 +534,7 @@ input, select, button {
     }
 
     #fat-div .macro-input-div .own-macro-input, #proteins-div .macro-input-div .own-macro-input {
-        width: 80%;
+        width: 70%;
     }
 
     #single-carbohydrates-div .macro-input-div .own-macro-input, #sugar-div .macro-input-div .own-macro-input {

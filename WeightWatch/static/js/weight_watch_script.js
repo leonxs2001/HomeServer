@@ -21,6 +21,11 @@ const ownSugarInput = document.querySelector("#own-sugar-input");
 const ownCarbohydratesInput = document.querySelector("#own-carbohydrates-input");
 const ownFatInput = document.querySelector("#own-fat-input");
 const ownKcalInput = document.querySelector("#own-kcal-input");
+const dishDateInput = document.querySelector("#datetime-input");
+
+const shareOverlay = document.querySelector("#shareOverlay");
+const shareDishData = document.querySelector("#share-dish-data");
+const shareUserSelect = document.querySelector("#user-select");
 
 window.addEventListener("load", () => {
     const deleteImages = document.querySelectorAll(".delete-img");
@@ -42,14 +47,22 @@ window.addEventListener("load", () => {
     });
 
     const dishListAddImage = document.querySelector("#dish-list-add-image");
-    dishListAddImage.addEventListener("click", (event) => {
-        overlay.style.display = "block";
-    });
+    dishListAddImage.addEventListener("click", onDishListAddImageClick);
 
     const closeFormElements = document.querySelectorAll("#close-form-img, #close-btn");
     closeFormElements.forEach(closeFormElement => {
         closeFormElement.addEventListener("click", onFormClose);
     });
+
+    const closeShareFormElements = document.querySelectorAll("#close-user-select-form-img, #close-user-select-btn");
+    closeShareFormElements.forEach(closeShareFormElement => {
+        closeShareFormElement.addEventListener("click", event => {
+            shareOverlay.style.display = "none";
+        });
+    });
+
+    const confirmShareFormBtn = document.querySelector("#confirm-user-select-btn");
+    confirmShareFormBtn.addEventListener("click", onShareUserConfirm);
 
     const confirmButton = document.querySelector("#confirm-btn");
     confirmButton.addEventListener("click", onFormConfirm);
@@ -71,6 +84,11 @@ window.addEventListener("load", () => {
     const ownMacroInputs = document.querySelectorAll(".own-macro-input");
     ownMacroInputs.forEach(ownMacroInput => {
         ownMacroInput.addEventListener("change", onMacroInputChange);
+    });
+
+    const shareImages = document.querySelectorAll(".share-img");
+    shareImages.forEach(shareImage => {
+        shareImage.addEventListener("click", onShareItemClick);
     });
 
     setMacroTextColors();
@@ -120,6 +138,7 @@ function onDeleteItemClick(event) {
 function onFormConfirm(event) {
     if (confirm("Ist die Speise so fertig und soll erstellt werden?")) {
         const name = nameInput.value;
+        const datetime = dishDateInput.value;
         let amount = amountInput.value;
         if (amount == "") {
             amount = 100;
@@ -145,6 +164,7 @@ function onFormConfirm(event) {
 
         if (dishFoodAmounts.length > 0) {
             let context = {
+                date: datetime,
                 name: name,
                 amount: amount,
                 dishFoodAmounts: dishFoodAmounts
@@ -176,6 +196,7 @@ function onFormConfirm(event) {
                 }
 
                 const newDishItem = dishTemplate.cloneNode(true);
+                newDishItem.dataset.date = datetime;
                 newDishItem.id = "dish-item-" + data["id"];
                 newDishItem.querySelector(".name-div").innerText = name;
                 newDishItem.querySelector(".amount-div").innerText = amount + " %";
@@ -185,7 +206,17 @@ function onFormConfirm(event) {
                 deleteImage.addEventListener("click", onDeleteItemClick);
                 newDishItem.querySelector(".edit-img").addEventListener("click", onEditItemClick);
                 newDishItem.querySelector(".clone-img").addEventListener("click", onCloneItemClick);
-                dishListDiv.insertBefore(newDishItem, dishListDiv.firstChild);
+                newDishItem.querySelector(".share-img").addEventListener("click", onShareItemClick);
+
+                const dishItems = document.querySelectorAll(".dish-item");
+                for (let i = 0; i < dishItems.length; i++) {
+                    if (dishItems[i].dataset.date < datetime) {
+                        dishListDiv.insertBefore(newDishItem, dishItems[i]);
+                    } else if (i == dishItems.length - 1) {
+                        dishListDiv.appendChild(newDishItem);
+                    }
+                }
+
 
                 fillMacrosFromData(data);
 
@@ -269,6 +300,7 @@ function fetchUserDishAmountAndShowOverlay(element, update) {
     }).then(data => {
         nameInput.value = data["dishName"];
         amountInput.value = data["amount"];
+        dishDateInput.value = data["eaten"];
 
         data["dishFoodAmounts"].forEach(dishFoodAmount => {
             createNewFoodItem(dishFoodAmount["name"], dishFoodAmount["food_id"], dishFoodAmount["amount"]);
@@ -436,4 +468,61 @@ function setMacroTextColors() {
             }
         }
     });
+}
+
+function onShareItemClick(event) {
+    shareOverlay.style.display = "block";
+    shareDishData.dataset.id = event.target.parentElement.querySelector(".delete-img").dataset.id;
+    shareDishData.dataset.name = event.target.parentElement.querySelector(".name-div").innerText;
+}
+
+function onShareUserConfirm(event) {
+    let username = shareUserSelect.options[shareUserSelect.selectedIndex].innerText.replace(/(^\s*)/, "").replace(/(\s*$)/, "");
+    let userId = shareUserSelect.value;
+    let dishName = shareDishData.dataset.name;
+    let dishId = shareDishData.dataset.id;
+    if (confirm(`Bist du dir sicher, dass du das Gericht ${dishName} mit dem Nutzer ${username} teilen willst?`)) {
+        fetch("/weight-watch/user-dish-amount/share", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfMiddlewareToken.value
+            },
+            body: JSON.stringify({
+                userId: userId,
+                dishId: dishId
+            })
+        }).then((response) => {
+            if (response.ok) {
+                shareOverlay.style.display = "none";
+
+            } else {
+                throw new Error("Request failed.");
+            }
+        }).catch((error) => console.log(error));
+    }
+
+}
+
+function onDishListAddImageClick() {
+    overlay.style.display = "block";
+
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const date = new Date();
+    const options = {timeZone: timeZone};
+    const formattedDate = date.toLocaleString("de-DE", options);
+    console.log(formattedDate)
+    // Das formatierte Datum in ein Array von Teilen aufteilen
+    let dateParts = formattedDate.split(', ');
+    let [day, month, year] = dateParts[0].split('.');
+    const timePart = dateParts[1];
+
+    // Uhrzeit in ein Array von Teilen aufteilen
+    const [hours, minutes, seconds] = timePart.split(':');
+
+
+    const currentDateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    dishDateInput.value = currentDateString;
+
+    amountInput.value = 100;
 }

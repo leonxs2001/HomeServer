@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from WeightWatch.querysets import DishAmountQuerySet, FoodQuerySet, UserMacrosQuerySet
+from WeightWatch.utils import DATE_FORMAT
 
 
 class StatisticChoices(models.TextChoices):
@@ -54,6 +55,10 @@ class UserDishAmount(models.Model):
 
     class Meta:
         ordering = ["-eaten"]
+
+    @property
+    def formatted_eaten(self):
+        return self.eaten.strftime(DATE_FORMAT)
 
 
 class UserMacros(models.Model):

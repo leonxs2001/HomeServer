@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import IntegrityError
@@ -14,7 +15,7 @@ from django.views.generic import TemplateView
 INPUT_TIME_FORMAT = "%Y-%m-%d"
 
 from WeightWatch.models import UserDishAmount, Food, Dish, DishFoodAmount, Category, UserMacros, StatisticChoices
-from WeightWatch.utils import ModelJSONEncoder
+from WeightWatch.utils import ModelJSONEncoder, DATE_FORMAT
 
 
 class WeightWatchView(TemplateView):
@@ -28,6 +29,7 @@ class WeightWatchView(TemplateView):
         context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).select_related("dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
+        context["other_users"] = User.objects.exclude(id=user.id)
         return context
 
 
@@ -68,6 +70,7 @@ class ManageUserDishAmountView(View):
             context["amount"] = user_dish_amount.amount
             context["dishName"] = dish.name
             context["userDishAmountId"] = user_dish_amount.id
+            context["eaten"] = user_dish_amount.eaten
             context["dishFoodAmounts"] = DishFoodAmount.objects.filter(dish=dish).annotate(
                 name=F("food__name")
             ).values("amount", "name")
@@ -109,7 +112,7 @@ class ManageUserDishAmountView(View):
                 print(e)
 
         user_dish_amount = UserDishAmount.objects.create(dish=dish, user=user, amount=float(data["amount"]),
-                                                         eaten=timezone.now())
+                                                         eaten=timezone.datetime.strptime(data["date"], DATE_FORMAT))
 
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
 
@@ -126,6 +129,8 @@ class ManageUserDishAmountView(View):
 
             dish = user_dish_amount.dish
             dish.name = data["name"]
+
+            user_dish_amount.eaten = eaten=timezone.datetime.strptime(data["date"], DATE_FORMAT)
 
             if user != user_dish_amount.user:
                 return HttpResponse(status=403)
@@ -147,6 +152,23 @@ class ManageUserDishAmountView(View):
 
             context["id"] = user_dish_amount.id
             return JsonResponse(context, ModelJSONEncoder)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=400)
+
+
+class ShareUserDishAmountView(View):
+    def put(self, request):
+        user = self.request.user
+        data = json.loads(request.body.decode("utf-8"))
+
+        try:
+            user_dish_amount = UserDishAmount.objects.get(user=user, id=int(data["dishId"]))
+            other_user = User.objects.get(id=int(data["userId"]))
+
+            UserDishAmount.objects.create(user=other_user, dish_id=user_dish_amount.dish_id,
+                                          amount=0, eaten=user_dish_amount.eaten)
+
+            return HttpResponse(status=200)
         except ObjectDoesNotExist:
             return HttpResponse(status=400)
 

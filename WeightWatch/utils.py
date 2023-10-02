@@ -3,7 +3,7 @@ from django.db.models import QuerySet, Model
 from django.forms import model_to_dict
 from django.utils import timezone
 
-DATE_FORMAT = "%Y-%m-%d"
+DATE_FORMAT = "%Y-%m-%dT%H:%M"
 
 
 class ModelJSONEncoder(DjangoJSONEncoder):
@@ -13,7 +13,10 @@ class ModelJSONEncoder(DjangoJSONEncoder):
         if isinstance(o, QuerySet):
             return list(o.values())
         if isinstance(o, Model):
-            return model_to_dict(o)
+            result = model_to_dict(o)
+            if "date" in result:
+                result["date"] = o.date.strftime(DATE_FORMAT)
+            return result
         if isinstance(o, timezone.datetime):
             return o.strftime(DATE_FORMAT)
         return super(ModelJSONEncoder, self).default(o)
