@@ -128,7 +128,7 @@ function onDeleteItemClick(event) {
             }
             throw new Error("Request failed.");
         }).then(data => {
-            fillMacrosFromData(data);
+            console.log(data);
 
         }).catch((error) => console.log(error));
     }

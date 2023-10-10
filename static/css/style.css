@@ -79,6 +79,10 @@ h1 {
     font-size: 0.8em;
 }
 
+img:hover{
+    transform: scale(1.05);
+}
+
 @media screen and (max-device-width: 480px) {
     body {
         font-size: 1.5em;

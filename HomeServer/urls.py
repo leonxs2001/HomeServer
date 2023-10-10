@@ -19,20 +19,24 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.generic import TemplateView
 
+from DriveWatch.views import DriveWatchView, ManageRideView, ManageTankFillingView
 from HomeServer.views import LoginView, LogoutView
 from WeightWatch.views import WeightWatchView, ManageUserDishAmountView, WeightWatchFoodView, ManageFoodView, \
     ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData, ShareUserDishAmountView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path("", login_required(TemplateView.as_view(template_name="home.html")), name="home"),
 
+    # login and logout
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view()),
 
+    # WeightWatch
+    path("", login_required(TemplateView.as_view(template_name="home.html")), name="home"),
+
     path("weight-watch/", login_required(WeightWatchView.as_view())),
-    path("weight-watch/statistics/", login_required(WeightWatchStatisticsView.as_view())),
-    path("weight-watch/food/", login_required(WeightWatchFoodView.as_view())),
+    path("weight-watch/statistics", login_required(WeightWatchStatisticsView.as_view())),
+    path("weight-watch/food", login_required(WeightWatchFoodView.as_view())),
 
     path("weight-watch/user-dish-amount", login_required(ManageUserDishAmountView.as_view())),
     path("weight-watch/user-dish-amount/share", login_required(ShareUserDishAmountView.as_view())),
@@ -40,4 +44,10 @@ urlpatterns = [
     path("weight-watch/category", login_required(ManageCategoryView.as_view())),
     path("weight-watch/user-macros", login_required(UserMacrosView.as_view())),
     path("weight-watch/statistics/get-data", login_required(WeightWatchGetStatisticData.as_view())),
+
+    # DriveWatch
+    path("drive-watch", login_required(DriveWatchView.as_view())),
+
+    path("drive-watch/ride", login_required(ManageRideView.as_view())),
+    path("drive-watch/tank-filling", login_required(ManageTankFillingView.as_view())),
 ]

@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DriveWatch</title>
+    <link rel="icon" href="{% static 'images/car-icon.svg' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/drive-watch-style.css' %}">
+</head>
+<body>
+{% csrf_token %}
+<div id="container">
+    <h1>
+        <div id="head-links-div">
+            <a id="back-link" href="/">
+                <img id="back-image" src="{% static 'images/back.svg' %}">
+            </a>
+            <a id="logout-link" href="/logout">
+                <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
+            </a>
+        </div>
+        <div>DriveWatch</div>
+    </h1>
+
+    <h2>Neue Tankfüllung?</h2>
+
+    <div id="tank-filling-div">
+        <label>Wie viel bezahlt?</label>
+        <div>
+            <input id="tank-filling-money-input" type="number" step="0.01" value="0">
+            <img id="add-tank-filling-img" src="{% static 'images/plus-solid.svg' %}">
+        </div>
+
+    </div>
+
+    <h2>Die Fahrten:</h2>
+    <div id="add-drive-div">
+        <div>
+            <label>Zugeordnet zu:</label>
+            <select id="ride-user-select">
+                <option value="">gemeinsam</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Strecke:</label>
+            <input id="ride-distance-input" type="number" step="0.01" value="0">
+        </div>
+        <img id="add-drive-img" src="{% static 'images/plus-solid.svg' %}">
+    </div>
+    <div id="drive-container">
+        <div id="ride-item-template" class="ride-item">
+            <div class="user-div">Nutzer</div>
+            <div>
+                <span class="distance-span">Distanz</span>
+                km
+            </div>
+            <div class="date-div">Datum</div>
+            <img data-id="-1" class="delete-img" src="{% static 'images/delete.svg' %}">
+        </div>
+
+        {% for ride in rides %}
+            <div class="ride-item">
+                <div class="user-div">
+                    {% if ride.user %}
+                        {{ ride.user.username }}
+                    {% else %}
+                        gemeinsam
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="distance-span">{{ ride.distance }}</span>
+                    km
+                </div>
+                <div class="date-div">{{ ride.formatted_date }}</div>
+                <img data-id="{{ ride.id }}" class="delete-img" src="{% static 'images/delete.svg' %}">
+            </div>
+        {% endfor %}
+    </div>
+    <script src="{% static 'js/drive-watch-script.js' %}"></script>
+</div>
+</body>
+</html>

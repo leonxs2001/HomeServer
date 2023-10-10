@@ -55,10 +55,6 @@ h1 {
     border: 1px solid black;
 }
 
-.edit-food-img:hover, .delete-food-img:hover, #category-close-form-img:hover {
-    transform: scale(1.05);
-}
-
 .edit-food-img, .delete-food-img {
     width: 5%;
 }

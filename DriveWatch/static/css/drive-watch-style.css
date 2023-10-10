@@ -1,0 +1,171 @@
+#container {
+    width: 40vw;
+    margin-left: 30vw;
+
+    height: 65vh;
+    margin-top: 8vh;
+}
+
+h1 {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    font-size: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0em;
+}
+
+#head-links-div {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#back-link, #logout-link {
+    all: revert;
+    text-decoration: none;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    margin-left: 0.2em;
+}
+
+#logout-image, #back-image {
+    height: 1em;
+}
+
+#back-image {
+    margin-right: 0.3em;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+#add-drive-div {
+    display: flex;
+    justify-content: space-between;
+    align-content: flex-end;
+    flex-wrap: wrap;
+}
+
+#add-drive-div div {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+#add-drive-img {
+    height: 2em;
+    border: 1px solid black;
+    margin-top: auto;
+}
+
+input, select {
+    padding: 0.3em;
+}
+
+#drive-container {
+    width: calc(99% - 2px);
+    padding: 0.5%;
+    border: 1px solid black;
+    margin-top: 0.5em;
+    height: 40vh;
+    overflow: auto;
+}
+
+.ride-item {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    width: calc(100% - 0.4em - 2px - 0.5em);
+    margin: 0.25em;
+    padding: 0.2em;
+}
+
+.ride-item div {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    width: 30%;
+}
+
+.delete-img {
+    width: 5%;
+    margin-left: auto;
+}
+
+.distance-span {
+    margin-right: 2%;
+}
+
+#ride-item-template {
+    display: none;
+}
+
+#tank-filling-div {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+
+#add-tank-filling-img {
+    width: 3%;
+    border: 1px solid black;
+    margin-left: 0.5em;
+}
+
+#tank-filling-div div {
+    width: 100%;
+    display: flex;
+}
+
+@media screen and (max-device-width: 480px) {
+    #container {
+        width: 80vw;
+        margin-left: 10vw;
+        margin-top: 10vh;
+    }
+
+    h1 {
+        font-size: 2.6em;
+    }
+
+    #back-image {
+        margin-right: 0.1em;
+    }
+
+    label {
+        font-size: 1.5em;
+    }
+
+    input, select, button {
+        font-size: 1.5em;
+    }
+
+    #add-drive-img {
+        height: 3em;
+    }
+
+    #drive-container {
+        height: 50vh;
+    }
+
+    .ride-item {
+        padding: 0.5em;
+        width: calc(100% - 1em - 2px - 1em);
+        margin: 0.5em;
+    }
+
+    .ride-item div {
+        font-size: 1.5em;
+    }
+
+    #add-tank-filling-img {
+        width: 5%;
+    }
+
+}

@@ -150,7 +150,7 @@ h2 {
     margin-left: 1%;
 }
 
-.delete-img:hover, #dish-list-add-image:hover, #close-form-img:hover, #food-add-image:hover, .food-delete-img:hover, .edit-img:hover, .clone-img:hover, #logout-image:hover, #back-image:hover, #statistics-img:hover, .share-img:hover, #close-user-select-form-img:hover {
+img:hover {
     transform: scale(1.05);
 }
 
