@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from DriveWatch.models import Ride, TankFilling
+from DriveWatch.utils import get_last_tank_filling_data_summary
 from WeightWatch.utils import ModelJSONEncoder
 
 
@@ -60,6 +61,11 @@ class ManageRideView(View):
 
 
 class ManageTankFillingView(View):
+
+    def get(self, request):
+        result = get_last_tank_filling_data_summary()
+
+        return JsonResponse(result, ModelJSONEncoder)
 
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))

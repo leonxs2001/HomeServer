@@ -22,7 +22,56 @@
         <div>DriveWatch</div>
     </h1>
 
-    <h2>Neue Tankfüllung?</h2>
+    <div id="drive-data-div">
+        <div id="head-drive-div" class="drive-div">
+            <div class="left"></div>
+            <div>gemeinsam</div>
+            {% for user in users %}
+                <div>{{ user.username }}</div>
+            {% endfor %}
+        </div>
+        <div class="drive-div">
+            <div class="description-div">Strecke:</div>
+            <div>
+                <div id="together-distance">Zahl</div>
+                <span>km</span>
+            </div>
+            {% for user in users %}
+                <div>
+                    <div id="user{{ user.id }}-distance">Zahl</div>
+                    <span>km</span>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="drive-div">
+            <div class="description-div">Geld:</div>
+            <div>
+                <div id="together-money">Zahl</div>
+                <span>&euro;</span>
+            </div>
+            {% for user in users %}
+                <div>
+                    <div id="user{{ user.id }}-money">Zahl2</div>
+                    <span>&euro;</span>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="drive-div">
+            <div class="description-div">Kalkuliert:</div>
+            <div>
+                <div id="total-money">Zahl</div>
+                <span>&euro;</span>
+            </div>
+            {% for user in users %}
+                <div class="important-info">
+                    <div id="user{{ user.id }}-calculated-money">Zahl2</div>
+                    <span>&euro;</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <h3>Neue Tankfüllung?</h3>
 
     <div id="tank-filling-div">
         <label>Wie viel bezahlt?</label>
@@ -33,7 +82,7 @@
 
     </div>
 
-    <h2>Die Fahrten:</h2>
+    <h3>Die Fahrten:</h3>
     <div id="add-drive-div">
         <div>
             <label>Zugeordnet zu:</label>
