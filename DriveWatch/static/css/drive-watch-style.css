@@ -51,7 +51,7 @@ img:hover {
 #add-drive-div div {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 30%;
 }
 
 #add-drive-img {
@@ -87,11 +87,14 @@ input, select {
     display: flex;
     align-content: center;
     flex-wrap: wrap;
-    width: 30%;
+    width: 22%;
 }
 
-.delete-img {
+.delete-img, .clone-img {
     width: 5%;
+}
+
+.clone-img{
     margin-left: auto;
 }
 
@@ -162,6 +165,12 @@ h3{
     color: orange;
 }
 
+#search-div{
+    display: flex;
+    flex-direction: column;
+        margin-bottom: 0.5em;
+}
+
 @media screen and (max-device-width: 480px) {
     #container {
         width: 80vw;
@@ -207,4 +216,7 @@ h3{
         width: 5%;
     }
 
+    #drive-data-div{
+        font-size: 1.4em;
+    }
 }

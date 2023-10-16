@@ -74,7 +74,7 @@
     <h3>Neue Tankfüllung?</h3>
 
     <div id="tank-filling-div">
-        <label>Wie viel bezahlt?</label>
+        <label>Wie viel bezahlt:</label>
         <div>
             <input id="tank-filling-money-input" type="number" step="0.01" value="0">
             <img id="add-tank-filling-img" src="{% static 'images/plus-solid.svg' %}">
@@ -83,7 +83,16 @@
     </div>
 
     <h3>Die Fahrten:</h3>
+    <div id="search-div">
+        <label>Suche nach einer Fahrt:</label>
+        <input id="search-ride-input" type="search" placeholder="Suche...">
+    </div>
+
     <div id="add-drive-div">
+        <div>
+            <label>Name:</label>
+            <input id="ride-name-input" placeholder="Name...">
+        </div>
         <div>
             <label>Zugeordnet zu:</label>
             <select id="ride-user-select">
@@ -101,29 +110,38 @@
     </div>
     <div id="drive-container">
         <div id="ride-item-template" class="ride-item">
+            <div class="name-div">
+            </div>
             <div class="user-div">Nutzer</div>
             <div>
                 <span class="distance-span">Distanz</span>
                 km
             </div>
             <div class="date-div">Datum</div>
+            <img class="clone-img" src="{% static 'images/clone.svg' %}">
             <img data-id="-1" class="delete-img" src="{% static 'images/delete.svg' %}">
         </div>
 
         {% for ride in rides %}
             <div class="ride-item">
-                <div class="user-div">
-                    {% if ride.user %}
-                        {{ ride.user.username }}
-                    {% else %}
-                        gemeinsam
-                    {% endif %}
+                <div class="name-div">
+                    {{ ride.name }}
                 </div>
+                {% if ride.user %}
+                    <div data-id="{{ ride.user.id }}" class="user-div">
+                        {{ ride.user.username }}
+                    </div>
+                {% else %}
+                    <div data-id="" class="user-div">
+                        gemeinsam
+                    </div>
+                {% endif %}
                 <div>
                     <span class="distance-span">{{ ride.distance }}</span>
                     km
                 </div>
                 <div class="date-div">{{ ride.formatted_date }}</div>
+                <img class="clone-img" src="{% static 'images/clone.svg' %}">
                 <img data-id="{{ ride.id }}" class="delete-img" src="{% static 'images/delete.svg' %}">
             </div>
         {% endfor %}

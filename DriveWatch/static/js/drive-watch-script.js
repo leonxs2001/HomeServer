@@ -1,6 +1,7 @@
 const csrfMiddlewareToken = document.querySelector('[name=csrfmiddlewaretoken]');
 const rideUserSelect = document.querySelector("#ride-user-select");
 const rideDistanceInput = document.querySelector("#ride-distance-input");
+const rideNameInput = document.querySelector("#ride-name-input");
 const rideItemTemplate = document.querySelector("#ride-item-template");
 const tankFillingMoneyInput = document.querySelector("#tank-filling-money-input");
 const driveDataDiv = document.querySelector("#drive-data-div");
@@ -14,8 +15,15 @@ window.addEventListener("load", () => {
         deleteImage.addEventListener("click", onDeleteRideItemClick);
     });
 
+    const cloneImages = document.querySelectorAll(".clone-img");
+    cloneImages.forEach(cloneImage => {
+        cloneImage.addEventListener("click", onCloneRideClick);
+    });
+
     document.querySelector("#add-drive-img").addEventListener("click", onCreateNewRideClick);
     document.querySelector("#add-tank-filling-img").addEventListener("click", onCreateNewTankFillingClick);
+
+    document.querySelector("#search-ride-input").addEventListener("input", onSearchRideInput);
 
     fillTankFillingDataSummary();
 });
@@ -44,12 +52,7 @@ function onDeleteRideItemClick(event) {
     }
 }
 
-function onCreateNewRideClick(event) {
-    let userId = rideUserSelect.value ? rideUserSelect.value : null;
-    let distance = rideDistanceInput.value ? rideDistanceInput.value : "0";
-    if (!distance.includes(".")) {
-        distance += ".0"
-    }
+function fetchNewRideToServer(userId, distance, name) {
     fetch("/drive-watch/ride", {
         method: "POST",
         headers: {
@@ -58,7 +61,8 @@ function onCreateNewRideClick(event) {
         },
         body: JSON.stringify({
             userId: userId,
-            distance: distance
+            distance: distance,
+            name: name
         })
     }).then((response) => {
         if (response.ok) {
@@ -69,16 +73,36 @@ function onCreateNewRideClick(event) {
 
         const newRideItem = rideItemTemplate.cloneNode(true);
         newRideItem.id = "";
-        newRideItem.querySelector(".user-div").innerText = rideUserSelect.options[rideUserSelect.selectedIndex].innerText;
+        newRideItem.style.display = "";
+
+        const userDiv = newRideItem.querySelector(".user-div");
+        userDiv.innerText = rideUserSelect.options[rideUserSelect.selectedIndex].innerText;
+        userDiv.dataset.id = rideUserSelect.value;
+
         newRideItem.querySelector(".distance-span").innerText = distance;
         newRideItem.querySelector(".date-div").innerText = data["formatted_date"];
+        newRideItem.querySelector(".name-div").innerText = name;
+
         const deleteImage = newRideItem.querySelector(".delete-img");
         deleteImage.dataset.id = data["id"];
         deleteImage.addEventListener("click", onDeleteRideItemClick);
 
+        newRideItem.querySelector(".clone-img").addEventListener("click", onCloneRideClick);
+
         rideItemTemplate.parentElement.insertBefore(newRideItem, rideItemTemplate.parentElement.firstChild);
 
     }).catch((error) => console.log(error));
+}
+
+function onCreateNewRideClick(event) {
+    let userId = rideUserSelect.value ? rideUserSelect.value : null;
+    let name = rideNameInput.value;
+    let distance = rideDistanceInput.value ? rideDistanceInput.value : "0";
+
+    if (!distance.includes(".")) {
+        distance += ".0"
+    }
+    fetchNewRideToServer(userId, distance, name);
 }
 
 function onCreateNewTankFillingClick() {
@@ -96,12 +120,6 @@ function onCreateNewTankFillingClick() {
     }).then((response) => {
         if (response.ok) {
             fillTankFillingDataSummary();
-
-            document.querySelectorAll(".ride-item").forEach(rideItem => {
-                if (rideItem.id != "ride-item-template") {
-                    rideItem.remove();
-                }
-            });
         } else {
             throw new Error("Request failed.");
         }
@@ -141,4 +159,28 @@ function fillTankFillingDataSummary() {
 
 
     }).catch((error) => console.log(error));
+}
+
+function onCloneRideClick(event){
+    const rideItem = event.target.parentElement;
+    const userDiv = rideItem.querySelector(".user-div");
+    let userId = userDiv.dataset.id ? userDiv.dataset.id : null;
+    let name = rideItem.querySelector(".name-div").innerText;
+    let distance = rideItem.querySelector(".distance-span").innerText;
+
+    fetchNewRideToServer(userId, distance, name);
+}
+
+function onSearchRideInput(event){
+    let searchText = event.target.value.toLowerCase();
+
+    document.querySelectorAll(".name-div").forEach(nameDiv =>{
+        if(nameDiv.id != "ride-item-template"){
+            if(nameDiv.innerText.toLowerCase().includes(searchText)){
+                nameDiv.parentElement.style.display = "";
+            }else {
+                nameDiv.parentElement.style.display = "none";
+            }
+        }
+    });
 }

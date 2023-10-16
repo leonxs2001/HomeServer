@@ -19,7 +19,7 @@ class DriveWatchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = dict()
         context["users"] = User.objects.all()
-        context["rides"] = Ride.objects.filter(tank_filling__date=None)
+        context["rides"] = Ride.objects.all()
         return context
 
 
@@ -50,7 +50,7 @@ class ManageRideView(View):
 
         last_tank_filling = TankFilling.objects.get(date=None)
 
-        new_ride = Ride.objects.create(user=user, distance=distance, tank_filling=last_tank_filling)
+        new_ride = Ride.objects.create(user=user, distance=distance, tank_filling=last_tank_filling, name=data["name"])
 
         new_ride_context = {
             "id": new_ride.id,
