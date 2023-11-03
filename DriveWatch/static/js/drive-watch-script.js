@@ -2,7 +2,7 @@ const csrfMiddlewareToken = document.querySelector('[name=csrfmiddlewaretoken]')
 const rideUserSelect = document.querySelector("#ride-user-select");
 const rideDistanceInput = document.querySelector("#ride-distance-input");
 const rideNameInput = document.querySelector("#ride-name-input");
-const rideItemTemplate = document.querySelector("#ride-item-template");
+const rideItemTemplate = document.querySelector("#ride-item-templates");
 const tankFillingMoneyInput = document.querySelector("#tank-filling-money-input");
 const driveDataDiv = document.querySelector("#drive-data-div");
 const togetherDistanceDiv = document.querySelector("#together-distance");
@@ -175,7 +175,7 @@ function onSearchRideInput(event){
     let searchText = event.target.value.toLowerCase();
 
     document.querySelectorAll(".name-div").forEach(nameDiv =>{
-        if(nameDiv.id != "ride-item-template"){
+        if(nameDiv.id != "ride-item-templates"){
             if(nameDiv.innerText.toLowerCase().includes(searchText)){
                 nameDiv.parentElement.style.display = "";
             }else {

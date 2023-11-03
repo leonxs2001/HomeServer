@@ -21,6 +21,7 @@ from django.views.generic import TemplateView
 
 from DriveWatch.views import DriveWatchView, ManageRideView, ManageTankFillingView
 from HomeServer.views import LoginView, LogoutView
+from PiHoleController.views import PiHoleView, PiHoleManageView
 from WeightWatch.views import WeightWatchView, ManageUserDishAmountView, WeightWatchFoodView, ManageFoodView, \
     ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData, ShareUserDishAmountView
 
@@ -50,4 +51,8 @@ urlpatterns = [
 
     path("drive-watch/ride", login_required(ManageRideView.as_view())),
     path("drive-watch/tank-filling", login_required(ManageTankFillingView.as_view())),
+
+    # PiHoleManager
+    path("pi-hole-manager", login_required(PiHoleView.as_view())),
+    path("pi-hole-manager/update", login_required(PiHoleManageView.as_view())),
 ]

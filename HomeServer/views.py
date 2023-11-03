@@ -8,7 +8,7 @@ class LoginView(View):
     """View for the login of a user."""
 
     def get(self, request):
-        """Returns the template with the login form."""
+        """Returns the templates with the login form."""
 
         return render(request, "login.html", {
             "form": AuthenticationForm()

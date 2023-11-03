@@ -2,7 +2,7 @@ const csrfMiddlewareToken = document.querySelector('[name=csrfmiddlewaretoken]')
 const foodDataElement = document.querySelector("#food-data");
 const foodOverlay = document.getElementById("overlay");
 const categorySelect = document.querySelector("#category-select");
-const categoryTemplate = document.querySelector("#category-template");
+const categoryTemplate = document.querySelector("#category-templates");
 const categoryAddImage = document.querySelector("#category-add-image");
 const nameInput = document.querySelector("#name-input");
 const kcalInput = document.querySelector("#kcal-input");
@@ -10,7 +10,7 @@ const fatInput = document.querySelector("#fat-input");
 const carbohydratesInput = document.querySelector("#carbohydrates-input");
 const proteinsInput = document.querySelector("#proteins-input");
 const sugarInput = document.querySelector("#sugar-input");
-const foodTemplate = document.querySelector("#food-template");
+const foodTemplate = document.querySelector("#food-templates");
 const foodDiv = document.querySelector("#food-div");
 const foodSearchInput = document.querySelector("#food-search-input");
 
@@ -100,7 +100,7 @@ function onFormConfirm() {
             const categoryNameDiv = categoryContainer.querySelector(".category-name-div");
             const colorDiv = categoryContainer.querySelector(".category-color-div");
 
-            if (categoryIdInput.parentElement.id != "category-template") {
+            if (categoryIdInput.parentElement.id != "category-templates") {
                 categories.push(categoryIdInput.value);
                 categoryNames.push(categoryNameDiv.innerText);
 
@@ -192,7 +192,7 @@ function clearForm() {
     foodOverlay.style.display = "none";
 
     document.querySelectorAll(".single-category-item-container").forEach(categoryItem => {
-        if (categoryItem.id != "category-template") {
+        if (categoryItem.id != "category-templates") {
             categoryItem.remove();
         }
     });

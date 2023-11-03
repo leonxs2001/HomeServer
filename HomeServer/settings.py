@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "WeightWatch",
     "MoneyWatch",
-    "DriveWatch"
+    "DriveWatch",
+    "PiHoleController"
 ]
 
 MIDDLEWARE = [

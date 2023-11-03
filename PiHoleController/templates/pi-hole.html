@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PiHoleController</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pi-hole.css' %}">
+</head>
+
+<body>
+{% csrf_token %}
+<div id="container">
+    <h1>
+        <div id="head-links-div">
+            <a id="back-link" href="/">
+                <img id="back-image" src="{% static 'images/back.svg' %}">
+            </a>
+            <a id="logout-link" href="/logout">
+                <img id="logout-image" src="{% static 'images/right-from-bracket-solid.svg' %}">
+            </a>
+        </div>
+        <div>PiHoleManager</div>
+    </h1>
+
+    <img onclick="changePiHole(this)" id="turn-off-img" src="{% static 'images/turn-off.svg' %}"
+         class="
+            {% if active %}
+            on
+            {% else %}
+            off
+            {% endif %}
+            ">
+</div>
+<script src="{% static 'js/pi-hole.js' %}"></script>
+</body>
+</html>
