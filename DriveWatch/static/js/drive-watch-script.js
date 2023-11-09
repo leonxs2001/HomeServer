@@ -2,7 +2,7 @@ const csrfMiddlewareToken = document.querySelector('[name=csrfmiddlewaretoken]')
 const rideUserSelect = document.querySelector("#ride-user-select");
 const rideDistanceInput = document.querySelector("#ride-distance-input");
 const rideNameInput = document.querySelector("#ride-name-input");
-const rideItemTemplate = document.querySelector("#ride-item-templates");
+const rideItemTemplate = document.querySelector("#ride-item-template");
 const tankFillingMoneyInput = document.querySelector("#tank-filling-money-input");
 const driveDataDiv = document.querySelector("#drive-data-div");
 const togetherDistanceDiv = document.querySelector("#together-distance");
