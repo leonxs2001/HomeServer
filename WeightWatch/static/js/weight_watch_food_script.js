@@ -2,7 +2,7 @@ const csrfMiddlewareToken = document.querySelector('[name=csrfmiddlewaretoken]')
 const foodDataElement = document.querySelector("#food-data");
 const foodOverlay = document.getElementById("overlay");
 const categorySelect = document.querySelector("#category-select");
-const categoryTemplate = document.querySelector("#category-templates");
+const categoryTemplate = document.querySelector("#category-template");
 const categoryAddImage = document.querySelector("#category-add-image");
 const nameInput = document.querySelector("#name-input");
 const kcalInput = document.querySelector("#kcal-input");
