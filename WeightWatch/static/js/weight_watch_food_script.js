@@ -10,7 +10,7 @@ const fatInput = document.querySelector("#fat-input");
 const carbohydratesInput = document.querySelector("#carbohydrates-input");
 const proteinsInput = document.querySelector("#proteins-input");
 const sugarInput = document.querySelector("#sugar-input");
-const foodTemplate = document.querySelector("#food-templates");
+const foodTemplate = document.querySelector("#food-template");
 const foodDiv = document.querySelector("#food-div");
 const foodSearchInput = document.querySelector("#food-search-input");
 
