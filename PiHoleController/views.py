@@ -12,7 +12,8 @@ class PiHoleView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = dict()
-        if "inactive" in subprocess.check_output("systemctl status pihole-FTL", shell=True, text=True, env={'PATH': '/usr/local/bin:/usr/bin:/bin'}):
+        subprocess.run()
+        if "inactive" in subprocess.run(['sudo', 'systemctl', 'status', 'pihole-FTL'], check=True, capture_output=True, text=True):
             context["active"] = False
         else:
             context["active"] = True
