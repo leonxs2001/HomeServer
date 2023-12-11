@@ -12,19 +12,10 @@ class PiHoleView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = dict()
-
-        # Befehl zum Überprüfen des Status von pihole-FTL
-        command = ['sudo', 'systemctl', 'status', 'pihole-FTL']
-
-        # Führen Sie den Befehl aus und erfassen Sie die Ausgabe
-        result = subprocess.run(command, check=True, capture_output=True, text=True)
-
-        # Überprüfen Sie, ob pihole-FTL aktiv ist
-        if "inactive" in result.stdout:
+        if "inactive" in subprocess.check_output("sudo systemctl status pihole-FTL", shell=True, text=True):
             context["active"] = False
         else:
             context["active"] = True
-
         return context
 
 
