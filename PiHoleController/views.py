@@ -18,7 +18,7 @@ class PiHoleView(TemplateView):
             else:
                 context["active"] = True
         except:
-            context["active"] = True
+            context["active"] = False
         return context
 
 
