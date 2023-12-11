@@ -12,7 +12,7 @@ class PiHoleView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = dict()
-        if "inactive" in subprocess.check_output("systemctl status pihole-FTL", shell=True, text=True):
+        if "inactive" in subprocess.check_output("sudo systemctl status pihole-FTL", shell=True, text=True):
             context["active"] = False
         else:
             context["active"] = True
@@ -25,7 +25,7 @@ class PiHoleManageView(View):
         active = data["active"]
 
         if active:
-            subprocess.call("systemctl start pihole-FTL", shell=True)
+            subprocess.call("sudo systemctl start pihole-FTL", shell=True)
         else:
-            subprocess.call("systemctl stop pihole-FTL", shell=True)
+            subprocess.call("sudo systemctl stop pihole-FTL", shell=True)
         return HttpResponse(status=200)
