@@ -53,9 +53,6 @@ class UserDishAmount(models.Model):
     amount = models.FloatField()  # in Prozent
     eaten = models.DateTimeField()
 
-    class Meta:
-        ordering = ["-eaten"]
-
     @property
     def formatted_eaten(self):
         return self.eaten.strftime(DATE_FORMAT)

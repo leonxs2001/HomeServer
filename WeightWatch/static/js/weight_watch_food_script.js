@@ -100,7 +100,7 @@ function onFormConfirm() {
             const categoryNameDiv = categoryContainer.querySelector(".category-name-div");
             const colorDiv = categoryContainer.querySelector(".category-color-div");
 
-            if (categoryIdInput.parentElement.id != "category-templates") {
+            if (categoryIdInput.parentElement.id != "category-template") {
                 categories.push(categoryIdInput.value);
                 categoryNames.push(categoryNameDiv.innerText);
 
@@ -192,7 +192,7 @@ function clearForm() {
     foodOverlay.style.display = "none";
 
     document.querySelectorAll(".single-category-item-container").forEach(categoryItem => {
-        if (categoryItem.id != "category-templates") {
+        if (categoryItem.id != "category-template") {
             categoryItem.remove();
         }
     });

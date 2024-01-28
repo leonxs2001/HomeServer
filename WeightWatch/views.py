@@ -26,7 +26,7 @@ class WeightWatchView(TemplateView):
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
         context["user"] = user
         context["user_macros"] = UserMacros.objects.filter(user=user).last()
-        context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).select_related("dish")
+        context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).order_by("-eaten").select_related("dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
         context["other_users"] = User.objects.exclude(id=user.id)
