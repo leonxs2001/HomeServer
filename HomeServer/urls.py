@@ -23,7 +23,8 @@ from DriveWatch.views import DriveWatchView, ManageRideView, ManageTankFillingVi
 from HomeServer.views import LoginView, LogoutView
 from PiHoleController.views import PiHoleView, PiHoleManageView
 from WeightWatch.views import WeightWatchView, ManageUserDishAmountView, WeightWatchFoodView, ManageFoodView, \
-    ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData, ShareUserDishAmountView
+    ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData, ShareUserDishAmountView, \
+    WeightWatchFoodMacros
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -45,6 +46,7 @@ urlpatterns = [
     path("weight-watch/category", login_required(ManageCategoryView.as_view())),
     path("weight-watch/user-macros", login_required(UserMacrosView.as_view())),
     path("weight-watch/statistics/get-data", login_required(WeightWatchGetStatisticData.as_view())),
+    path("weight-watch/food-macros", login_required(WeightWatchFoodMacros.as_view())),
 
     # DriveWatch
     path("drive-watch", login_required(DriveWatchView.as_view())),

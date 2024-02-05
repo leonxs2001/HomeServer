@@ -28,6 +28,10 @@ const shareDishData = document.querySelector("#share-dish-data");
 const shareUserSelect = document.querySelector("#user-select");
 
 window.addEventListener("load", () => {
+    const infoImage = document.querySelector("#info-img");
+
+    infoImage.addEventListener("click", onDishInfoItemClick);
+
     const deleteImages = document.querySelectorAll(".delete-img");
 
     deleteImages.forEach(deleteImage => {
@@ -95,6 +99,44 @@ window.addEventListener("load", () => {
 
 });
 
+function onDishInfoItemClick() {
+    const singleFoodItemContainers = document.querySelectorAll(".single-food-item-container");
+    let foodIdAmountList = [];
+    singleFoodItemContainers.forEach(singleFoodItemContainer => {
+
+        if (singleFoodItemContainer.id != "food-template") {
+            let foodId = singleFoodItemContainer.querySelector(".food-id-input").value;
+            let foodAmount = singleFoodItemContainer.querySelector(".food-amount-input").value;
+            if (!foodAmount) {
+                foodAmount = 0;
+            }
+
+            foodIdAmountList.push({
+                id: foodId,
+                amount: foodAmount
+            })
+        }
+    });
+
+    fetch("/weight-watch/food-macros", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfMiddlewareToken.value
+        },
+        body: JSON.stringify({
+            data: foodIdAmountList
+        })
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error("Request failed.");
+    }).then(data => {
+        alert(`Kcal: ${data["kcal"]}\nFett: ${data["fat"]}\nKohlenhydrate: ${data["carbohydrates"]}\nZucker: ${data["sugar"]}\nProteine: ${data["proteins"]}`)
+
+    }).catch((error) => console.log(error));
+}
 
 function fillMacrosFromData(data) {
     kcalDiv.querySelector("span").innerText = data["kcal"];

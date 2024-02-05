@@ -213,7 +213,7 @@ img:hover {
     margin-bottom: 0.5em;
 }
 
-#datetime-input{
+#datetime-input {
     margin-bottom: 1em;
     width: -webkit-fill-available;
 }
@@ -397,8 +397,18 @@ input, select, button {
     margin: 1em 0;
 }
 
-#user-select{
+#user-select {
     width: 100%;
+}
+
+#info-img {
+    height: 1em;
+    margin: auto 0.2em;
+}
+
+#dish-h1{
+    display: flex;
+    flex-direction: row;
 }
 
 @media screen and (max-device-width: 480px) {

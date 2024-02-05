@@ -26,7 +26,8 @@ class WeightWatchView(TemplateView):
         context = UserDishAmount.objects.generate_macro_sum_up(user, timezone.now())
         context["user"] = user
         context["user_macros"] = UserMacros.objects.filter(user=user).last()
-        context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).order_by("-eaten").select_related("dish")
+        context["user_dish_amounts"] = UserDishAmount.objects.filter(user=user).order_by("-eaten").select_related(
+            "dish")
         context["food"] = Food.objects.all()
         context["categories"] = Category.objects.all()
         context["other_users"] = User.objects.exclude(id=user.id)
@@ -54,6 +55,38 @@ class WeightWatchStatisticsView(TemplateView):
         return context
 
 
+class WeightWatchFoodMacros(View):
+    def post(self, request):
+        data = json.loads(request.body.decode("utf-8"))
+        food_id_amount_list = data["data"]
+
+        context = {
+            "kcal": 0,
+            "fat": 0,
+            "carbohydrates": 0,
+            "sugar": 0,
+            "proteins": 0
+        }
+
+        for food_id_amount in food_id_amount_list:
+            try:
+                food_id = int(food_id_amount["id"])
+                food_amount = float(food_id_amount["amount"])
+
+                food = Food.objects.get(id=food_id)
+
+                context["kcal"] += (food.kcal / 100) * food_amount
+                context["carbohydrates"] += (food.carbohydrates / 100) * food_amount
+                context["fat"] += (food.fat / 100) * food_amount
+                context["carbohydrates"] += (food.carbohydrates / 100) * food_amount
+                context["sugar"] += (food.sugar / 100) * food_amount
+                context["proteins"] += (food.proteins / 100) * food_amount
+            except:
+                continue
+
+        return JsonResponse(context, ModelJSONEncoder)
+
+
 class ManageUserDishAmountView(View):
     def get(self, request):
         try:
@@ -75,7 +108,7 @@ class ManageUserDishAmountView(View):
                 name=F("food__name")
             ).values("amount", "name")
 
-            return JsonResponse(context, ModelJSONEncoder, safe=False)
+            return JsonResponse(context, ModelJSONEncoder)
 
         except ObjectDoesNotExist:
             return HttpResponse(status=400)
