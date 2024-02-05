@@ -78,11 +78,16 @@ class WeightWatchFoodMacros(View):
                 context["kcal"] += (food.kcal / 100) * food_amount
                 context["carbohydrates"] += (food.carbohydrates / 100) * food_amount
                 context["fat"] += (food.fat / 100) * food_amount
-                context["carbohydrates"] += (food.carbohydrates / 100) * food_amount
                 context["sugar"] += (food.sugar / 100) * food_amount
                 context["proteins"] += (food.proteins / 100) * food_amount
             except:
                 continue
+
+        context["kcal"] = round(context["kcal"], 2)
+        context["carbohydrates"] = round(context["carbohydrates"], 2)
+        context["fat"] = round(context["fat"], 2)
+        context["sugar"] = round(context["sugar"], 2)
+        context["proteins"] = round(context["proteins"], 2)
 
         return JsonResponse(context, ModelJSONEncoder)
 

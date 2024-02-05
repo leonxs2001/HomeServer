@@ -133,7 +133,7 @@ function onDishInfoItemClick() {
         }
         throw new Error("Request failed.");
     }).then(data => {
-        alert(`Kcal: ${data["kcal"]}\nFett: ${data["fat"]}\nKohlenhydrate: ${data["carbohydrates"]}\nZucker: ${data["sugar"]}\nProteine: ${data["proteins"]}`)
+        alert(`Kcal: ${data["kcal"]}\nFett: ${data["fat"]}\nKohlenhydrate: ${data["carbohydrates"]}\n   davon Zucker: ${data["sugar"]}\nProteine: ${data["proteins"]}`)
 
     }).catch((error) => console.log(error));
 }
