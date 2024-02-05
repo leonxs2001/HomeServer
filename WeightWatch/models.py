@@ -18,7 +18,7 @@ class StatisticChoices(models.TextChoices):
 class Food(models.Model):
     objects = FoodQuerySet.as_manager()
 
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     kcal = models.IntegerField()
     fat = models.FloatField()
     carbohydrates = models.FloatField()
@@ -27,13 +27,13 @@ class Food(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     color = models.CharField(max_length=8, default="#ffff90")
     food = models.ManyToManyField(Food)
 
 
 class Dish(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     date_of_creation = models.DateTimeField()
     foods = models.ManyToManyField(Food, through='DishFoodAmount')
 
