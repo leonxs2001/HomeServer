@@ -210,8 +210,13 @@ function onFormConfirm(event) {
 
                 const dishItems = document.querySelectorAll(".dish-item");
                 for (let i = 0; i < dishItems.length; i++) {
-                    if (dishItems[i].dataset.date < datetime) {
+                    console.log(dishItems[i]);
+                    console.log(dishItems[i].dataset.date);
+                    console.log(datetime, dishItems[i].dataset.date < datetime);
+
+                    if (dishItems[i].id != "dish-template" && dishItems[i].dataset.date < datetime) {
                         dishListDiv.insertBefore(newDishItem, dishItems[i]);
+                        break;
                     } else if (i == dishItems.length - 1) {
                         dishListDiv.appendChild(newDishItem);
                     }
