@@ -287,7 +287,7 @@ function clearForm() {
 
 }
 
-function fetchUserDishAmountAndShowOverlay(element, update) {
+function fetchUserDishAmountAndShowOverlay(element, update, resetDate = false) {
     const userDishAmountId = element.parentElement.querySelector(".delete-img").dataset.id;
     let new_url = new URL(location.protocol + "//" + location.host + "/weight-watch/user-dish-amount");
     new_url.searchParams.append("id", userDishAmountId);
@@ -305,8 +305,20 @@ function fetchUserDishAmountAndShowOverlay(element, update) {
     }).then(data => {
         nameInput.value = data["dishName"];
         amountInput.value = data["amount"];
-        dishDateInput.value = data["eaten"];
 
+        if (resetDate) {
+            let now = new Date();
+
+            let year = now.getFullYear();
+            let month = (now.getMonth() + 1).toString().padStart(2, '0');
+            let day = now.getDate().toString().padStart(2, '0');
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+
+            dishDateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        } else {
+            dishDateInput.value = data["eaten"];
+        }
         data["dishFoodAmounts"].forEach(dishFoodAmount => {
             createNewFoodItem(dishFoodAmount["name"], dishFoodAmount["food_id"], dishFoodAmount["amount"]);
         })
@@ -329,7 +341,7 @@ function onEditItemClick(event) {
 
 function onCloneItemClick(event) {
     const element = event.target;
-    fetchUserDishAmountAndShowOverlay(element, false);
+    fetchUserDishAmountAndShowOverlay(element, false, true);
 }
 
 function selectEmptyOptionForFoodSelectIfAllHidden() {
