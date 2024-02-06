@@ -118,6 +118,8 @@ function onDishInfoItemClick() {
         }
     });
 
+    const amount = parseFloat(amountInput.value) / 100
+
     fetch("/weight-watch/food-macros", {
         method: "POST",
         headers: {
@@ -133,7 +135,7 @@ function onDishInfoItemClick() {
         }
         throw new Error("Request failed.");
     }).then(data => {
-        alert(`Kcal: ${data["kcal"]}\nFett: ${data["fat"]}\nKohlenhydrate: ${data["carbohydrates"]}\n   davon Zucker: ${data["sugar"]}\nProteine: ${data["proteins"]}`)
+        alert(`Kcal: ${data["kcal"] * amount}\nFett: ${data["fat"] * amount}\nKohlenhydrate: ${data["carbohydrates"] * amount}\n   davon Zucker: ${data["sugar"] * amount}\nProteine: ${data["proteins"] * amount}`)
 
     }).catch((error) => console.log(error));
 }
