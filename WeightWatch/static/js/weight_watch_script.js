@@ -388,14 +388,14 @@ function onCloneItemClick(event) {
     fetchUserDishAmountAndShowOverlay(element, false, true);
 }
 
-function selectEmptyOptionForFoodSelectIfAllHidden() {
+function selectFirstOptionForFoodSelectIfAllHidden() {
     let countHidden = 0;
     let notHidden = null;
     for (let i = 0; i < foodSelect.options.length; i++) {
         if (foodSelect.options[i].value) {
             if (foodSelect.options[i].style.display == "none") {
                 countHidden++;
-            } else {
+            } else if(!notHidden){
                 notHidden = foodSelect.options[i];
             }
         }
@@ -435,7 +435,7 @@ function onCategoryChange(event) {
             }
         }
     }
-    selectEmptyOptionForFoodSelectIfAllHidden();
+    selectFirstOptionForFoodSelectIfAllHidden();
 }
 
 function onFoodSearchChange(event) {
@@ -455,7 +455,72 @@ function onFoodSearchChange(event) {
         }
     }
 
-    selectEmptyOptionForFoodSelectIfAllHidden();
+    const optionsArray = Array.from(foodSelect.options);
+
+    optionsArray.sort((a, b) => {
+        const aString = a.text.toLowerCase();
+        const bString = b.text.toLowerCase();
+
+        let numberOfSameCharsA = 0;
+        let endOfA = false;
+        let numberOfSameCharsB = 0;
+        let endOfB = false;
+
+        let minLength = aString.length;
+        if (bString.length < minLength) {
+            minLength = bString.length;
+        }
+        if (searchValue.length < minLength) {
+            minLength = searchValue.length;
+        }
+
+        for (let i = 0; i < minLength; i++) {
+            if (!endOfA && aString[i] == searchValue[i]) {
+                numberOfSameCharsA += 1;
+            } else {
+                endOfA = true;
+            }
+
+            if (!endOfB && bString[i] == searchValue[i]) {
+                numberOfSameCharsB += 1;
+            } else {
+                endOfB = true;
+            }
+
+            if (endOfA && endOfB || (endOfA && numberOfSameCharsB > numberOfSameCharsA) || (endOfB && numberOfSameCharsA > numberOfSameCharsB)) {
+                break;
+            }
+        }
+
+        if (numberOfSameCharsA > numberOfSameCharsB) {
+            return -1;
+        } else if (numberOfSameCharsA < numberOfSameCharsB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    while (foodSelect.options.length > 0) {
+        foodSelect.remove(0);
+    }
+
+    let placeholder = null;
+    optionsArray.forEach(option => {
+        if(option.value){
+            foodSelect.appendChild(option);
+        }else{
+            placeholder = option;
+        }
+    });
+
+    if(foodSelect.options.length > 0){
+        foodSelect.insertBefore(placeholder, foodSelect.options[0]);
+    }else{
+        foodSelect.appendChild(placeholder);
+    }
+    
+    selectFirstOptionForFoodSelectIfAllHidden();
 }
 
 function onDishSearchInput(event) {
