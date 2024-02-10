@@ -160,7 +160,7 @@ function onKcalNeedInputChange() {
 
     const kcalLossPerDay = kcalDifference / 7000
 
-    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)} pro Monat und ${(kcalLossPerDay * 365.25).toFixed(2)} pro Jahr ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
+    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)}kg pro Monat und ${(kcalLossPerDay * 365.25).toFixed(2)}kg pro Jahr ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
 
     weightLossSpan.textContent = resultString;
 }
