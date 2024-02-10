@@ -140,6 +140,8 @@ function onInputChange() {
         }
 
         statisticChart.update();
+
+        onKcalNeedInputChange();
     }).catch((error) => console.log(error));
 
 }
