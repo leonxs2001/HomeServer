@@ -158,9 +158,20 @@ function onKcalNeedInputChange() {
 
     const kcalDifference = parseFloat(kcalNeedInput.value) - averageKcal;
 
-    const kcalLossPerDay = kcalDifference / 7000
+    const kcalLossPerDay = kcalDifference / 7000;
 
-    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)}kg pro Monat und ${(kcalLossPerDay * 365.25).toFixed(2)}kg pro Jahr ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
+    const startDateString = startDateInput.value;
+    const endDateString = endDateInput.value;
+
+    const startTimestamp = new Date(startDateString).getTime();
+    const endTimestamp = new Date(endDateString).getTime();
+
+    // Number of milliseconds per day (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+    const daysBetween = (endTimestamp - startTimestamp) / millisecondsPerDay;
+
+    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)}kg pro Monat, ${(kcalLossPerDay * 365.25).toFixed(2)}kg pro Jahr und ${(kcalLossPerDay * daysBetween).toFixed(2)}kg in der angegeben Zeit ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
 
     weightLossSpan.textContent = resultString;
 }
