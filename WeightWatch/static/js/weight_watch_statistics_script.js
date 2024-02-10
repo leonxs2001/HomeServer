@@ -147,33 +147,38 @@ function onInputChange() {
 }
 
 function onKcalNeedInputChange() {
-    let kcalSum = 0;
 
-    const newDishAmountData = statisticChart.data.datasets[0].data;
-    newDishAmountData.forEach(newDishAmountDate => {
-        if (newDishAmountDate != "") {
-            kcalSum += parseFloat(newDishAmountDate);
-        }
-    });
+    if(kcalNeedInput.value != "0") {
+        let kcalSum = 0;
 
-    const averageKcal = kcalSum / newDishAmountData.length;
+        const newDishAmountData = statisticChart.data.datasets[0].data;
+        newDishAmountData.forEach(newDishAmountDate => {
+            if (newDishAmountDate != "") {
+                kcalSum += parseFloat(newDishAmountDate);
+            }
+        });
 
-    const kcalDifference = parseFloat(kcalNeedInput.value) - averageKcal;
+        const averageKcal = kcalSum / newDishAmountData.length;
 
-    const kcalLossPerDay = kcalDifference / 7000;
+        const kcalDifference = parseFloat(kcalNeedInput.value) - averageKcal;
 
-    const startDateString = startDateInput.value;
-    const endDateString = endDateInput.value;
+        const kcalLossPerDay = kcalDifference / 7000;
 
-    const startTimestamp = new Date(startDateString).getTime();
-    const endTimestamp = new Date(endDateString).getTime();
+        const startDateString = startDateInput.value;
+        const endDateString = endDateInput.value;
 
-    // Number of milliseconds per day (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
-    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+        const startTimestamp = new Date(startDateString).getTime();
+        const endTimestamp = new Date(endDateString).getTime();
 
-    const daysBetween = (endTimestamp - startTimestamp) / millisecondsPerDay;
+        // Number of milliseconds per day (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
+        const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)}kg pro Monat, ${(kcalLossPerDay * 365.25).toFixed(2)}kg pro Jahr und ${(kcalLossPerDay * daysBetween).toFixed(2)}kg in der angegeben Zeit ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
+        const daysBetween = (endTimestamp - startTimestamp) / millisecondsPerDay;
 
-    weightLossSpan.textContent = resultString;
+        let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)}kg pro Monat, ${(kcalLossPerDay * 365.25).toFixed(2)}kg pro Jahr und ${(kcalLossPerDay * daysBetween).toFixed(2)}kg in der angegeben Zeit ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
+
+        weightLossSpan.textContent = resultString;
+    }else{
+        weightLossSpan.textContent = "";
+    }
 }
