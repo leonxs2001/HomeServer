@@ -1,7 +1,10 @@
 const startDateInput = document.querySelector("#start-date-input");
 const endDateInput = document.querySelector("#end-date-input");
 const typeSelect = document.querySelector("#type-select");
+const weightLossDiv = document.querySelector("#weight-loss-div");
+const kcalNeedInput = document.querySelector("#kcal-need-input");
 const statisticCanvas = document.querySelector("#statistic-canvas");
+const weightLossSpan = document.querySelector("#weight-loss-span");
 
 let statisticChart = null;
 
@@ -9,6 +12,7 @@ window.addEventListener("load", () => {
     startDateInput.addEventListener("change", onInputChange);
     endDateInput.addEventListener("change", onInputChange);
     typeSelect.addEventListener("change", onInputChange);
+    kcalNeedInput.addEventListener("change", onKcalNeedInputChange);
     statisticChart = new Chart(statisticCanvas, {
         type: 'line',
         data: {
@@ -84,7 +88,6 @@ function onInputChange() {
         }
         throw new Error("Request failed.");
     }).then(data => {
-        console.log(data)
         let userMacros = data["user_macros"]
         let dishAmounts = data["dish_amounts"];
 
@@ -130,7 +133,34 @@ function onInputChange() {
         statisticChart.data.datasets[1].data = newUserMacroData;
         statisticChart.data.datasets[0].data = newDishAmountData;
 
+        if (typeString == "kcal") {
+            weightLossDiv.style.display = "block"
+        } else {
+            weightLossDiv.style.display = "none";
+        }
+
         statisticChart.update();
     }).catch((error) => console.log(error));
 
+}
+
+function onKcalNeedInputChange() {
+    let kcalSum = 0;
+
+    const newDishAmountData = statisticChart.data.datasets[0].data;
+    newDishAmountData.forEach(newDishAmountDate => {
+        if (newDishAmountDate != "") {
+            kcalSum += parseFloat(newDishAmountDate);
+        }
+    });
+
+    const averageKcal = kcalSum / newDishAmountData.length;
+
+    const kcalDifference = parseFloat(kcalNeedInput.value) - averageKcal;
+
+    const kcalLossPerDay = kcalDifference / 7000
+
+    let resultString = `Du nimmst ca. ${(kcalLossPerDay).toFixed(2)}kg pro Tag, ${(kcalLossPerDay * 7).toFixed(2)}kg pro Woche, ${(kcalLossPerDay * 30.44).toFixed(2)} pro Monat und ${(kcalLossPerDay * 365.25).toFixed(2)} pro Jahr ab. Zumindest, wenn die durchschnittliche Abweichung so bleibt wie in dem angegeben Zeitraum.`;
+
+    weightLossSpan.textContent = resultString;
 }
