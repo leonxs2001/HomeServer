@@ -333,6 +333,7 @@ function clearForm() {
 }
 
 function fetchUserDishAmountAndShowOverlay(element, update, resetDate = false) {
+    resetDataListOptions();
     const userDishAmountId = element.parentElement.querySelector(".delete-img").dataset.id;
     let new_url = new URL(location.protocol + "//" + location.host + "/weight-watch/user-dish-amount");
     new_url.searchParams.append("id", userDishAmountId);
@@ -632,6 +633,7 @@ function onShareUserConfirm(event) {
 }
 
 function onDishListAddImageClick() {
+    resetDataListOptions();
     overlay.style.display = "block";
 
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
