@@ -150,7 +150,9 @@
         </h1>
         <div id="form-div">
             <label>Name:</label>
-            <input id="name-input" type="text" placeholder="Name..." maxlength="128">
+            <input list="name-input-list" id="name-input" type="text" placeholder="Name..." maxlength="128">
+            <datalist id="name-input-list">
+            </datalist>
             <label>Menge in Prozent:</label>
             <input id="amount-input" min="0" max="100" step="0.01" type="number" placeholder="Menge in Prozent...">
             <label>Gegessen zur Zeit:</label>

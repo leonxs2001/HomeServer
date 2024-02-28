@@ -22,6 +22,7 @@ const ownCarbohydratesInput = document.querySelector("#own-carbohydrates-input")
 const ownFatInput = document.querySelector("#own-fat-input");
 const ownKcalInput = document.querySelector("#own-kcal-input");
 const dishDateInput = document.querySelector("#datetime-input");
+const nameInputDataList = document.querySelector("#name-input-list");
 
 const shareOverlay = document.querySelector("#shareOverlay");
 const shareDishData = document.querySelector("#share-dish-data");
@@ -395,7 +396,7 @@ function selectFirstOptionForFoodSelectIfAllHidden() {
         if (foodSelect.options[i].value) {
             if (foodSelect.options[i].style.display == "none") {
                 countHidden++;
-            } else if(!notHidden){
+            } else if (!notHidden) {
                 notHidden = foodSelect.options[i];
             }
         }
@@ -507,19 +508,19 @@ function onFoodSearchChange(event) {
 
     let placeholder = null;
     optionsArray.forEach(option => {
-        if(option.value){
+        if (option.value) {
             foodSelect.appendChild(option);
-        }else{
+        } else {
             placeholder = option;
         }
     });
 
-    if(foodSelect.options.length > 0){
+    if (foodSelect.options.length > 0) {
         foodSelect.insertBefore(placeholder, foodSelect.options[0]);
-    }else{
+    } else {
         foodSelect.appendChild(placeholder);
     }
-    
+
     selectFirstOptionForFoodSelectIfAllHidden();
 }
 
@@ -651,4 +652,29 @@ function onDishListAddImageClick() {
     dishDateInput.value = currentDateString;
 
     amountInput.value = 100;
+}
+
+function resetDataListOptions() {
+
+    const dishItemNames = document.querySelectorAll(".name-div");
+    let myNameSet = new Set();
+
+    dishItemNames.forEach(dishItemNameDiv => {
+        if (dishItemNameDiv.id != "dish-template") {
+            myNameSet.add(dishItemNameDiv.textContent);
+        }
+
+    });
+
+
+    while (nameInputDataList.firstChild) {
+        nameInputDataList.removeChild(nameInputDataList.firstChild);
+    }
+
+    myNameSet.forEach(name => {
+        let newNameOption = document.createElement("option");
+        newNameOption.textContent = name;
+
+        nameInputDataList.appendChild(newNameOption);
+    });
 }
