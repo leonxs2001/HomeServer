@@ -20,6 +20,13 @@ const categoryNameInput = document.querySelector("#category-name-input");
 const categoryColorInput = document.querySelector("#category-color-input");
 
 window.addEventListener("load", () => {
+    const foodIsCreated = sessionStorage.getItem("foodIsCreated");
+    if (foodIsCreated === "false") {
+        createNewFoodFromDish();
+    } else {
+        sessionStorage.clear();
+    }
+
     const deleteCategoryImages = document.querySelectorAll(".category-delete-img");
 
     deleteCategoryImages.forEach(deleteCategoryImage => {
@@ -42,9 +49,7 @@ window.addEventListener("load", () => {
     categoryAddImage.addEventListener("click", onCategoryAddClick);
 
     const addNewFoodButton = document.querySelector("#add-new-food-btn");
-    addNewFoodButton.addEventListener("click", (event) => {
-        foodOverlay.style.display = "block";
-    });
+    addNewFoodButton.addEventListener("click", showFoodOverlay);
 
     const closeFoodFormElements = document.querySelectorAll("#close-form-img, #close-btn");
     closeFoodFormElements.forEach(closeFoodFormElement => {
@@ -79,6 +84,12 @@ window.addEventListener("load", () => {
 function onFormClose() {
     if (confirm("Bist du sicher, dass du die Zutat nicht hinzufügen willst?")) {
         clearForm();
+        // if the form is closed and it is opened from the dish view
+        const foodIsCreated = sessionStorage.getItem("foodIsCreated");
+        if (foodIsCreated === "false") {
+            sessionStorage.setItem("foodCreationFailed", true);
+            window.location.pathname = "/weight-watch/";
+        }
     }
 }
 
@@ -145,7 +156,14 @@ function onFormConfirm() {
                 throw new Error("Request failed.");
             }
         }).then(data => {
-            foodSearchInput.value="";
+            const foodIsCreated = sessionStorage.getItem("foodIsCreated");
+            if (foodIsCreated === "false") {
+                sessionStorage.setItem("foodId", data["id"]);
+                sessionStorage.setItem("foodIsCreated", true);
+                window.location.pathname = "/weight-watch/";
+            }
+
+            foodSearchInput.value = "";
             functionShowAllFoodItems();
 
             const newFoodItem = foodTemplate.cloneNode(true);
@@ -177,7 +195,7 @@ function onFormConfirm() {
                 newDeleteFoodImage.classList = oldDeleteFoodImage.classList;//for the not clickable class
                 foodDiv.insertBefore(newFoodItem, oldElement);
                 oldElement.remove();
-            }else{
+            } else {
                 foodDiv.insertBefore(newFoodItem, foodDiv.firstChild);
             }
 
@@ -210,8 +228,8 @@ function clearForm() {
     categoryAddImage.hidden = false;
     foodDataElement.dataset.update = "0"
 
-    for(let i = 0; i< categorySelect.options.length;i++){
-        if([...categorySelect.options[i].classList].includes("hidden")){
+    for (let i = 0; i < categorySelect.options.length; i++) {
+        if ([...categorySelect.options[i].classList].includes("hidden")) {
             categorySelect.options[i].classList.remove("hidden");
         }
     }
@@ -469,22 +487,33 @@ function rgbToHex(rgb) {
     return hex;
 }
 
-function onFoodSearchInput(event){
+function onFoodSearchInput(event) {
     let searchText = event.target.value.toLowerCase();
 
     const foodNames = document.querySelectorAll(".food-name");
-    foodNames.forEach(foodName =>{
-        if(foodName.innerText.toLowerCase().includes(searchText)){
+    foodNames.forEach(foodName => {
+        if (foodName.innerText.toLowerCase().includes(searchText)) {
             foodName.parentElement.style.display = "";
-        }else{
+        } else {
             foodName.parentElement.style.display = "none";
         }
     });
 }
 
-function functionShowAllFoodItems(){
+function functionShowAllFoodItems() {
     const foodItems = document.querySelectorAll(".single-food-item");
-    foodItems.forEach(foodItem =>{
-        foodItem.style.display="";
+    foodItems.forEach(foodItem => {
+        foodItem.style.display = "";
     });
+}
+
+function createNewFoodFromDish() {
+    const newFoodName = sessionStorage.getItem("newFoodName");
+    nameInput.value = newFoodName;
+    showFoodOverlay();
+
+}
+
+function showFoodOverlay() {
+    foodOverlay.style.display = "block";
 }

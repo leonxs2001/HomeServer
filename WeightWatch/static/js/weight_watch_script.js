@@ -12,7 +12,7 @@ const fatDiv = document.querySelector("#fat-div");
 const carbohydratesDiv = document.querySelector("#single-carbohydrates-div");
 const sugarDiv = document.querySelector("#sugar-div");
 const proteinsDiv = document.querySelector("#proteins-div");
-const foodDataElement = document.querySelector("#food-data");
+const dishDataElement = document.querySelector("#dish-data");
 const categorySelect = document.querySelector("#category-select");
 const searchInput = document.querySelector("#search-input");
 const dishSearchInput = document.querySelector("#dish-search-input");
@@ -29,6 +29,7 @@ const shareDishData = document.querySelector("#share-dish-data");
 const shareUserSelect = document.querySelector("#user-select");
 
 window.addEventListener("load", () => {
+
     const infoImage = document.querySelector("#info-img");
 
     infoImage.addEventListener("click", onDishInfoItemClick);
@@ -97,6 +98,24 @@ window.addEventListener("load", () => {
     });
 
     setMacroTextColors();
+
+    const foodIsCreated = sessionStorage.getItem("foodIsCreated");
+    const foodCreationFailed = sessionStorage.getItem("foodCreationFailed");
+
+    if (foodIsCreated === "true") {
+        const foodId = sessionStorage.getItem("foodId");
+        loadDishFromSessionStorage();
+        foodSelect.value = foodId;
+        foodAddImage.click();
+    }
+
+    if (foodIsCreated != "true" && foodCreationFailed != "true") {
+        sessionStorage.clear();
+    }
+
+    if (foodCreationFailed === "true") {
+        loadDishFromSessionStorage();
+    }
 
 });
 
@@ -168,20 +187,17 @@ function onDeleteItemClick(event) {
                 id: id
             })
         }).then((response) => {
-            if (response.ok) {
-                return response.json();
+            if (!response.ok) {
+                throw new Error("Request failed.");
             }
-            throw new Error("Request failed.");
-        }).then(data => {
-            console.log(data);
-
         }).catch((error) => console.log(error));
     }
 
 }
 
-function onFormConfirm(event) {
-    if (confirm("Ist die Speise so fertig und soll erstellt werden?")) {
+function onFormConfirm(callForConfirm = true, onComplete = () => {
+}) {
+    if (!callForConfirm || confirm("Ist die Speise so fertig und soll erstellt werden?")) {
         const name = nameInput.value;
         const datetime = dishDateInput.value;
         let amount = amountInput.value;
@@ -207,71 +223,71 @@ function onFormConfirm(event) {
         });
 
 
-        if (dishFoodAmounts.length > 0) {
-            let context = {
-                date: datetime,
-                name: name,
-                amount: amount,
-                dishFoodAmounts: dishFoodAmounts
-            }
-            let method = "POST"
-            let update = false;
-            if (foodDataElement.dataset.update == "1") {
-                context["id"] = foodDataElement.dataset.id;
-                method = "PUT"
-                update = true;
-            }
-
-            fetch("/weight-watch/user-dish-amount", {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfMiddlewareToken.value
-                },
-                body: JSON.stringify(context)
-            }).then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Request failed.");
-            }).then(data => {
-                if (update) {
-                    let oldElement = document.querySelector("#dish-item-" + data["id"]);
-                    oldElement.remove();
-                }
-
-                const newDishItem = dishTemplate.cloneNode(true);
-                newDishItem.dataset.date = datetime;
-                newDishItem.id = "dish-item-" + data["id"];
-                newDishItem.querySelector(".name-div").innerText = name;
-                newDishItem.querySelector(".amount-div").innerText = amount + " %";
-
-                const deleteImage = newDishItem.querySelector(".delete-img");
-                deleteImage.dataset.id = data["id"];
-                deleteImage.addEventListener("click", onDeleteItemClick);
-                newDishItem.querySelector(".edit-img").addEventListener("click", onEditItemClick);
-                newDishItem.querySelector(".clone-img").addEventListener("click", onCloneItemClick);
-                newDishItem.querySelector(".share-img").addEventListener("click", onShareItemClick);
-
-                const dishItems = document.querySelectorAll(".dish-item");
-                for (let i = 0; i < dishItems.length; i++) {
-                    console.log(dishItems[i]);
-                    console.log(dishItems[i].dataset.date);
-                    console.log(datetime, dishItems[i].dataset.date < datetime);
-
-                    if (dishItems[i].id != "dish-template" && dishItems[i].dataset.date < datetime) {
-                        dishListDiv.insertBefore(newDishItem, dishItems[i]);
-                        break;
-                    } else if (i == dishItems.length - 1) {
-                        dishListDiv.appendChild(newDishItem);
-                    }
-                }
-
-
-                fillMacrosFromData(data);
-
-            }).catch((error) => console.log(error));
+        let context = {
+            date: datetime,
+            name: name,
+            amount: amount,
+            dishFoodAmounts: dishFoodAmounts
         }
+        let method = "POST"
+        let update = false;
+        if (dishDataElement.dataset.update == "1") {
+            context["id"] = dishDataElement.dataset.id;
+            method = "PUT"
+            update = true;
+        }
+
+        fetch("/weight-watch/user-dish-amount", {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfMiddlewareToken.value
+            },
+            body: JSON.stringify(context)
+        }).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error("Request failed.");
+        }).then(data => {
+            if (update) {
+                let oldElement = document.querySelector("#dish-item-" + data["id"]);
+                oldElement.remove();
+            }
+
+            const newDishItem = dishTemplate.cloneNode(true);
+            newDishItem.dataset.date = datetime;
+            newDishItem.id = "dish-item-" + data["id"];
+            newDishItem.querySelector(".name-div").innerText = name;
+            newDishItem.querySelector(".amount-div").innerText = amount + " %";
+
+            const deleteImage = newDishItem.querySelector(".delete-img");
+            deleteImage.dataset.id = data["id"];
+            deleteImage.addEventListener("click", onDeleteItemClick);
+            newDishItem.querySelector(".edit-img").addEventListener("click", onEditItemClick);
+            newDishItem.querySelector(".clone-img").addEventListener("click", onCloneItemClick);
+            newDishItem.querySelector(".share-img").addEventListener("click", onShareItemClick);
+
+            const dishItems = document.querySelectorAll(".dish-item");
+            for (let i = 0; i < dishItems.length; i++) {
+
+                if (dishItems[i].id != "dish-template" && dishItems[i].dataset.date < datetime) {
+                    dishListDiv.insertBefore(newDishItem, dishItems[i]);
+                    break;
+                } else if (i == dishItems.length - 1) {
+                    dishListDiv.appendChild(newDishItem);
+                }
+            }
+
+
+            fillMacrosFromData(data);
+            onComplete();
+
+        }).catch((error) => {
+            console.log(error);
+            onComplete();
+        });
+
         showAllNameDivs();
         clearForm();
     }
@@ -299,6 +315,8 @@ function addNewFoodDiv(event) {
     const foodName = foodSelect.options[foodSelect.selectedIndex].textContent;
     if (foodId) {
         createNewFoodItem(foodName, foodId);
+    } else {
+        createNewFoodForDish();
     }
 
 }
@@ -321,7 +339,7 @@ function clearForm() {
     nameInput.value = "";
     amountInput.value = "";
 
-    foodDataElement.dataset.update = "0";
+    dishDataElement.dataset.update = "0";
 
     const singleFoodItemContainers = document.querySelectorAll(".single-food-item-container");
     singleFoodItemContainers.forEach(singleFoodItemContainer => {
@@ -372,8 +390,8 @@ function fetchUserDishAmountAndShowOverlay(element, update, resetDate = false) {
         overlay.style.display = "block";
 
         if (update) {
-            foodDataElement.dataset.update = "1";
-            foodDataElement.dataset.id = data["userDishAmountId"];
+            dishDataElement.dataset.update = "1";
+            dishDataElement.dataset.id = data["userDishAmountId"];
         }
 
 
@@ -640,7 +658,6 @@ function onDishListAddImageClick() {
     const date = new Date();
     const options = {timeZone: timeZone};
     const formattedDate = date.toLocaleString("de-DE", options);
-    console.log(formattedDate)
     // Das formatierte Datum in ein Array von Teilen aufteilen
     let dateParts = formattedDate.split(', ');
     let [day, month, year] = dateParts[0].split('.');
@@ -679,4 +696,48 @@ function resetDataListOptions() {
 
         nameInputDataList.appendChild(newNameOption);
     });
+}
+
+function createNewFoodForDish() {
+    const searchInputValue = searchInput.value;
+    if (searchInputValue) {
+        if (confirm(`Es gibt diese Art von Gericht leider nicht. Willst du ein neues Gericht mit dem Namen \"${searchInputValue}\" erstellen?`)) {
+            if (dishDataElement.dataset.update == 1) {
+                createNewFoodForDishWithId(dishDataElement.dataset.id, searchInputValue);
+            } else {
+                const dishIdInputs = Array.from(document.querySelectorAll(".delete-img"));
+                onFormConfirm(false, () => {
+                    const newDishIdInputs = Array.from(document.querySelectorAll(".delete-img"));
+                    let filteredDishIdInputs = newDishIdInputs.filter(item => !dishIdInputs.includes(item));
+                    createNewFoodForDishWithId(filteredDishIdInputs[0].dataset.id, searchInputValue);
+                });
+            }
+
+        }
+
+    }
+
+}
+
+function createNewFoodForDishWithId(id, foodName) {
+    sessionStorage.setItem("dishId", id);
+    sessionStorage.setItem("newFoodName", foodName);
+    sessionStorage.setItem("foodIsCreated", false);
+    window.location.pathname += "food";
+
+}
+
+function loadDishFromSessionStorage() {
+    const id = sessionStorage.getItem("dishId");
+    const dishItems = document.querySelectorAll(".dish-item");
+    for (let i = 0; i < dishItems.length; i++) {
+        const dishItem = dishItems[i];
+        const deleteImg = dishItem.querySelector(".delete-img");
+        if (deleteImg.dataset.id == id) {
+            fetchUserDishAmountAndShowOverlay(deleteImg, true);
+            break;
+        }
+    }
+
+    sessionStorage.clear();
 }
