@@ -98,9 +98,9 @@ function onFormConfirm() {
         const name = nameInput.value;
         let kcal = kcalInput.value ? kcalInput.value : "0";
         let fat = fatInput.value ? fatInput.value : "0";
-        let carbohydrates = fatInput.value ? carbohydratesInput.value : "0";
-        let sugar = fatInput.value ? sugarInput.value : "0";
-        let proteins = fatInput.value ? proteinsInput.value : "0";
+        let carbohydrates = carbohydratesInput.value ? carbohydratesInput.value : "0";
+        let sugar = sugarInput.value ? sugarInput.value : "0";
+        let proteins = proteinsInput.value ? proteinsInput.value : "0";
         const categories = [];
         const categoryColors = [];
         const categoryNames = [];
