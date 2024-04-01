@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from HomeServer.secret_settings import INITIAL_USERS, DATABASES, ALLOWED_HOSTS, DEBUG, SECRET_KEY
+from HomeServer.secret_settings import INITIAL_USERS, DATABASES, ALLOWED_HOSTS, DEBUG, SECRET_KEY, STATIC_ROOT
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
