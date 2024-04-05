@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from HomeServer.secret_settings import INITIAL_USERS, DATABASES, ALLOWED_HOSTS, DEBUG, SECRET_KEY, STATIC_ROOT, CSRF_TRUSTED_ORIGINS
+from HomeServer.secret_settings import INITIAL_USERS, DATABASES, ALLOWED_HOSTS, DEBUG, SECRET_KEY, STATIC_ROOT, \
+    CSRF_TRUSTED_ORIGINS, STATICFILES_DIRS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -64,7 +64,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'HomeServer.wsgi.application'
 
-
 LOGIN_URL = "/login/"
 
 # Password validation
@@ -85,7 +84,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -97,14 +95,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = ((os.path.join(BASE_DIR, 'static')),)
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
