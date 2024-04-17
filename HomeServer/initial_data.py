@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.conf import settings
 
 from DriveWatch.models import TankFilling
@@ -13,7 +13,6 @@ def initialize():
 
 def __init_base_users():
     for user_dict in settings.INITIAL_USERS:
-
         user, created = User.objects.get_or_create(
             username=user_dict["username"],
             first_name=user_dict["first_name"],
@@ -30,3 +29,4 @@ def __init_base_users():
 def __init_first_tank_filling():
     if TankFilling.objects.all().count() <= 0:
         TankFilling.objects.create()
+

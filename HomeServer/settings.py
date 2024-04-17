@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import json
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-from HomeServer.secret_settings import INITIAL_USERS, DATABASES, ALLOWED_HOSTS, DEBUG, SECRET_KEY, STATIC_ROOT, \
-    CSRF_TRUSTED_ORIGINS, STATICFILES_DIRS
+from decouple import config, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,7 +29,7 @@ INSTALLED_APPS = [
     "WeightWatch",
     "MoneyWatch",
     "DriveWatch",
-    "PiHoleController"
+    "PiHoleController",
 ]
 
 MIDDLEWARE = [
@@ -42,6 +41,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+DATABASES = {
+    "default": {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config("DATABASE_NAME"),
+        'USER': config("DATABASE_USER"),
+        'PASSWORD': config("DATABASE_PASSWORD"),
+        'HOST': config("DATABASE_HOST"),
+        'PORT': config("DATABASE_PORT", default=3306, cast=int),
+    }
+}
+
+SECRET_KEY = config("SECRET_KEY")
 
 ROOT_URLCONF = 'HomeServer.urls'
 
@@ -61,6 +73,8 @@ TEMPLATES = [
         },
     },
 ]
+
+STATICFILES_DIRS = ((os.path.join(BASE_DIR, 'static')),)
 
 WSGI_APPLICATION = 'HomeServer.wsgi.application'
 
@@ -104,3 +118,17 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DEBUG = config("DEBUG", default=True, cast=bool)
+
+static_root = config("STATIC_ROOT", default="")
+
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="")
+
+initial_users = config("INITIAL_USERS", default="[]")
+INITIAL_USERS = json.loads(initial_users)
+
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default="")
+
+if static_root:
+    STATIC_ROOT = static_root
