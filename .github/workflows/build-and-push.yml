@@ -21,7 +21,7 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build -t ${{ secrets.DOCKER_HUB_REPOSITORY }}/${{ secrets.DOCKER_HUB_TOKEN }}:latest .
+      run: docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
 
     - name: Push the Docker image to DockerHub
-      run: docker push ${{ secrets.DOCKER_HUB_REPOSITORY }}/${{ secrets.DOCKER_HUB_TOKEN }}:latest
+      run: docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
