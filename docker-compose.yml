@@ -2,6 +2,5 @@ version: '3.8'
 services:
   home_server:
     image: leonxs/home_server:latest
-    ports:
-      - "8000:8000"
+    network_mode: host
     env_file: .env
