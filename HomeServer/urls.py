@@ -25,6 +25,7 @@ from PiHoleController.views import PiHoleView, PiHoleManageView
 from WeightWatch.views import WeightWatchView, ManageUserDishAmountView, WeightWatchFoodView, ManageFoodView, \
     ManageCategoryView, UserMacrosView, WeightWatchStatisticsView, WeightWatchGetStatisticData, ShareUserDishAmountView, \
     WeightWatchFoodMacros
+from study.views import StudyView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -57,4 +58,5 @@ urlpatterns = [
     # PiHoleManager
     path("pi-hole-manager", login_required(PiHoleView.as_view())),
     path("pi-hole-manager/update", login_required(PiHoleManageView.as_view())),
+    path("events", StudyView.as_view())
 ]
