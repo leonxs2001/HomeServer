@@ -13,7 +13,7 @@ The project is built using Django as the web framework and is intended for perso
 - Track calories, carbohydrates, sugar, protein, and fat.
 - Add and manage food entries.
 - Add and manage ingredients.
-- Sshow statitics for all macros
+- Show statitics for all macros
 
 ### DriveWatch
 - Log car trips with distance.
