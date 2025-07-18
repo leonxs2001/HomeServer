@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   db:
     image: mysql:8.0
@@ -13,7 +15,7 @@ services:
       - backend
 
   web:
-    image: leonxs/home_server:latest
+    build: .
     env_file:
       - .env
     volumes:
@@ -24,7 +26,7 @@ services:
       - backend
 
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
     ports:
       - "80:80"
       - "443:443"
@@ -47,12 +49,15 @@ services:
     volumes:
       - certbot_certs:/etc/letsencrypt
       - certbot_www:/var/www/certbot
-    entrypoint: >
-      sh -c "certbot certonly --webroot \
-      --webroot-path=/var/www/certbot \
-      --email ${CERTBOT_EMAIL} \
-      --agree-tos --no-eff-email \
-      $(echo ${CERTBOT_DOMAINS} | xargs -n1 echo -d | tr '\n' ' ')"
+    entrypoint: certbot
+    command: >
+      certonly --webroot
+      --webroot-path=/var/www/certbot
+      --email ${CERTBOT_EMAIL}
+      --agree-tos
+      --no-eff-email
+      -d leon-schoenberg.de
+      -d www.leon-schoenberg.de
     networks:
       - backend
 
