@@ -46,17 +46,17 @@ services:
       - nginx
     env_file:
       - .env
+    environment:
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      CERTBOT_DOMAINS: ${CERTBOT_DOMAINS}
     volumes:
+      - ./init-cert.sh:/init-cert.sh:ro
       - certbot_certs:/etc/letsencrypt
       - certbot_www:/var/www/certbot
-    entrypoint: >
-      sh -c "certbot certonly --webroot
-             --webroot-path=/var/www/certbot
-             --email $CERTBOT_EMAIL
-             --agree-tos --no-eff-email
-             $(echo $CERTBOT_DOMAINS | xargs -n1 echo -d | tr '\n' ' ')"
+    entrypoint: /init-cert.sh
     networks:
       - backend
+
 
   certbot_renew:
     image: certbot/certbot
