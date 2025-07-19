@@ -1,11 +1,11 @@
-﻿version: '3.8'
-
-services:
+﻿services:
   home_server:
     image: leonxs/home_server:latest
     env_file: .env
     depends_on:
       - db
+    ports:
+      - "8000:8000"
 
   db:
     image: mysql:8.0
