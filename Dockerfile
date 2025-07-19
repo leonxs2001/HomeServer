@@ -2,26 +2,26 @@
 
 WORKDIR /app
 
-# System-Abhängigkeiten (inkl. netcat & MySQL-Header)
+# Systemabhängigkeiten installieren (MySQL + netcat)
 RUN apt-get update && apt-get install -y \
     netcat-openbsd \
-    build-essential \
     default-libmysqlclient-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Anforderungen installieren
+# Python-Abhängigkeiten installieren
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Projektdateien kopieren
 COPY . .
 
-# entrypoint.sh kopieren und ausführbar machen
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Standard-Einstiegspunkt
-ENTRYPOINT ["/entrypoint.sh"]
-
-# Django-Port freigeben
-EXPOSE 8000
+# Startkommando: Warten auf DB, dann Django starten
+CMD bash -c "\
+  echo '⏳ Warten auf MySQL (${DATABASE_HOST}:${DATABASE_PORT})...' && \
+  until nc -z \"$DATABASE_HOST\" \"$DATABASE_PORT\"; do sleep 1; done && \
+  echo '✅ MySQL ist bereit – starte Django...' && \
+  python manage.py collectstatic --noinput && \
+  python manage.py makemigrations && \
+  python manage.py migrate && \
+  exec python manage.py runserver 0.0.0.0:8000"
