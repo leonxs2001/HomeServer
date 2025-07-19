@@ -11,10 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-from HomeServer.initial_data import initialize
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HomeServer.settings')
 
 application = get_asgi_application()
-
-initialize()
