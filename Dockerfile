@@ -20,5 +20,5 @@ CMD bash -c "\
   python manage.py collectstatic --noinput && \
   python manage.py makemigrations && \
   python manage.py migrate && \
-  exec gunicorn your_project_name.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+  exec gunicorn HomeServer.wsgi:application --bind 0.0.0.0:8000 --workers 3"
 
