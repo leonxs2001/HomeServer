@@ -2,21 +2,21 @@
 
 WORKDIR /app
 
-# Systemabhängigkeiten für MySQL + netcat
+# Systemabhängigkeiten für MySQL und Netcat
 RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     default-libmysqlclient-dev \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Installiere Python-Abhängigkeiten
+# Python-Abhängigkeiten installieren
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiere Projektdateien
+# Projektdateien kopieren
 COPY . .
 
-# Startbefehl direkt im CMD (wartet auf DB + startet Django)
+# Startkommando mit integriertem MySQL-Warten
 CMD bash -c "\
   echo '⏳ Warten auf MySQL (${DATABASE_HOST}:${DATABASE_PORT})...' && \
   until nc -z \"$DATABASE_HOST\" \"$DATABASE_PORT\"; do sleep 1; done && \
