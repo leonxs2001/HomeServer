@@ -2,12 +2,18 @@
 
 WORKDIR /app
 
-COPY requirements.txt .
+# MySQL-Abhängigkeiten (optional, je nach Paket)
+RUN apt-get update && apt-get install -y netcat
 
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["bash", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# entrypoint.sh hinzufügen
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8000
