@@ -1,21 +1,24 @@
-# 1. Basis-Image mit Python
 FROM python:3.8-slim
 
-# 2. Arbeitsverzeichnis im Container
+# Install system dependencies needed for mysqlclient
+RUN apt-get update && \
+    apt-get install -y gcc default-libmysqlclient-dev pkg-config && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
 
-# 3. Requirements installieren
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# 4. Projektdateien kopieren
+# Copy project files
 COPY . .
 
-# 5. Collectstatic & Migrate werden über entrypoint oder docker-compose ausgeführt
-
-# 6. Port (Gunicorn nutzt 8000)
+# Expose Gunicorn port
 EXPOSE 8000
 
-# 7. Start über Bash → Migration, Staticfiles, Gunicorn
+# Run migrations, collectstatic, and start Gunicorn
 CMD ["bash", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn HomeServer.wsgi:application --bind 0.0.0.0:8000"]
