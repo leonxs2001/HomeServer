@@ -13,10 +13,8 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 SECRET_KEY = config("SECRET_KEY")
 
 # Erlaubte Hosts
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="")
-
-# CSRF Trusted Origins (für z.B. Formulare aus anderen Domains)
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default="")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="localhost,127.0.0.1")
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default="http://localhost")
 
 # Applikationen
 INSTALLED_APPS = [
@@ -27,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # deine eigenen Apps
+    # eigene Apps
     'WeightWatch',
     'MoneyWatch',
     'DriveWatch',
@@ -46,13 +44,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URLs & WSGI
 ROOT_URLCONF = 'HomeServer.urls'
+WSGI_APPLICATION = 'HomeServer.wsgi.application'
 
 # Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # eigene Templates
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,9 +64,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# WSGI
-WSGI_APPLICATION = 'HomeServer.wsgi.application'
 
 # Datenbank (MySQL via Docker Compose)
 DATABASES = {
@@ -94,11 +91,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Statische Dateien
+# Statische Dateien (von Nginx ausgeliefert)
 STATIC_URL = '/static/'
-STATIC_ROOT = config("STATIC_ROOT", default=BASE_DIR / "static")
+STATIC_ROOT = BASE_DIR / "static"
 
-# Medien (optional – wenn du Datei-Uploads nutzt)
+# Medien (für Datei-Uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -106,8 +103,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 initial_users = config("INITIAL_USERS", default="[]")
 INITIAL_USERS = json.loads(initial_users)
 
-# Wohin wird man nach Login weitergeleitet?
+# Nach Login Weiterleitung
 LOGIN_URL = "/login/"
 
-# Default Primary Key Type
+# Sicherheit (für Production via Nginx + HTTPS)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+# Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
