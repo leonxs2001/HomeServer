@@ -1,44 +1,6 @@
-version: '3.8'
-
+﻿version: '3.8'
 services:
-  db:
-    image: mysql:8.0
-    restart: always
-    env_file: .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-    volumes:
-      - db_data:/var/lib/mysql
-
-  web:
+  home_server:
     image: leonxs/home_server:latest
-    restart: always
+    network_mode: host
     env_file: .env
-    depends_on:
-      - db
-    volumes:
-      - static_volume:/app/static  # für collectstatic
-    command: >
-      bash -c "
-      python manage.py migrate &&
-      python manage.py collectstatic --noinput &&
-      gunicorn HomeServer.wsgi:application --bind 0.0.0.0:8000
-      "
-
-  nginx:
-    image: nginx:latest
-    restart: always
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-    volumes:
-      - static_volume:/app/static
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-
-volumes:
-  db_data:
-  static_volume:
